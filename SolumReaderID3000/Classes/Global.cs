@@ -9,5 +9,7 @@ namespace SolumReaderID3000
     public class Global
     {
         public static ReaderControl readerControl;
+        public static int length = 20;
+        public static string format = "";
     }
 }

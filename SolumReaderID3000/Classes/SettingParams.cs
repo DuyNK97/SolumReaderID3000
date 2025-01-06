@@ -23,6 +23,9 @@ namespace SolumReaderID3000
         public string ModelName { get; set; }
         public float Exposure { get; set; }
         public float Gain { get; set; }
+
+        public int Length {  get; set; }    
+        public string Format {  get; set; } 
     }
 
 }

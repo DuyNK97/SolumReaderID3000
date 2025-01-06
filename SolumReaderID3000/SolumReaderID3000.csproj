@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ClassifyResult.cs" />
+    <Compile Include="Classes\ControlUDP.cs" />
     <Compile Include="Classes\CreateClassInstance.cs" />
     <Compile Include="Classes\Global.cs" />
     <Compile Include="Classes\ReaderControl.cs" />
@@ -111,6 +112,7 @@
   <ItemGroup>
     <Content Include="Lib\MvCodeReaderSDK.Net.dll" />
     <Content Include="Lib\MvCodeReaderSDK.Net.XML" />
+    <None Include="Logo.ico" />
     <Content Include="solum.ico" />
     <None Include="solum.png" />
   </ItemGroup>

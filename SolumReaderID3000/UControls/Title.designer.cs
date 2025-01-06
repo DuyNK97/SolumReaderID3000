@@ -52,7 +52,7 @@
             this.panel2.ForeColor = System.Drawing.Color.Blue;
             this.panel2.Location = new System.Drawing.Point(732, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(304, 45);
+            this.panel2.Size = new System.Drawing.Size(304, 54);
             this.panel2.TabIndex = 6;
             // 
             // btnMinForm
@@ -66,10 +66,10 @@
             this.btnMinForm.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMinForm.ForeColor = System.Drawing.Color.White;
             this.btnMinForm.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMinForm.Location = new System.Drawing.Point(229, 4);
+            this.btnMinForm.Location = new System.Drawing.Point(218, 8);
             this.btnMinForm.Margin = new System.Windows.Forms.Padding(1);
             this.btnMinForm.Name = "btnMinForm";
-            this.btnMinForm.Size = new System.Drawing.Size(30, 30);
+            this.btnMinForm.Size = new System.Drawing.Size(35, 35);
             this.btnMinForm.TabIndex = 2;
             this.btnMinForm.TabStop = false;
             this.btnMinForm.Tag = "Minimize";
@@ -89,10 +89,10 @@
             this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExit.ForeColor = System.Drawing.Color.White;
             this.btnExit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnExit.Location = new System.Drawing.Point(263, 4);
+            this.btnExit.Location = new System.Drawing.Point(262, 8);
             this.btnExit.Margin = new System.Windows.Forms.Padding(1);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(30, 30);
+            this.btnExit.Size = new System.Drawing.Size(35, 35);
             this.btnExit.TabIndex = 1;
             this.btnExit.TabStop = false;
             this.btnExit.Tag = "Exit";
@@ -105,7 +105,7 @@
             this.lbTimer.AutoSize = true;
             this.lbTimer.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Bold);
             this.lbTimer.ForeColor = System.Drawing.Color.White;
-            this.lbTimer.Location = new System.Drawing.Point(3, 13);
+            this.lbTimer.Location = new System.Drawing.Point(4, 14);
             this.lbTimer.Name = "lbTimer";
             this.lbTimer.Size = new System.Drawing.Size(172, 22);
             this.lbTimer.TabIndex = 4;
@@ -118,7 +118,7 @@
             this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label2.Location = new System.Drawing.Point(208, 5);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(3, 35);
+            this.label2.Size = new System.Drawing.Size(3, 42);
             this.label2.TabIndex = 3;
             // 
             // ptbLoGo
@@ -127,7 +127,7 @@
             this.ptbLoGo.Dock = System.Windows.Forms.DockStyle.Left;
             this.ptbLoGo.Location = new System.Drawing.Point(0, 0);
             this.ptbLoGo.Name = "ptbLoGo";
-            this.ptbLoGo.Size = new System.Drawing.Size(68, 45);
+            this.ptbLoGo.Size = new System.Drawing.Size(111, 54);
             this.ptbLoGo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ptbLoGo.TabIndex = 5;
             this.ptbLoGo.TabStop = false;
@@ -136,7 +136,7 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 45);
+            this.panel1.Location = new System.Drawing.Point(0, 54);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1036, 3);
             this.panel1.TabIndex = 4;
@@ -146,9 +146,9 @@
             this.lbNameTittle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbNameTittle.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbNameTittle.ForeColor = System.Drawing.Color.White;
-            this.lbNameTittle.Location = new System.Drawing.Point(68, 0);
+            this.lbNameTittle.Location = new System.Drawing.Point(111, 0);
             this.lbNameTittle.Name = "lbNameTittle";
-            this.lbNameTittle.Size = new System.Drawing.Size(664, 45);
+            this.lbNameTittle.Size = new System.Drawing.Size(621, 54);
             this.lbNameTittle.TabIndex = 7;
             this.lbNameTittle.Text = "Name title";
             this.lbNameTittle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -168,7 +168,7 @@
             this.Controls.Add(this.ptbLoGo);
             this.Controls.Add(this.panel1);
             this.Name = "Title";
-            this.Size = new System.Drawing.Size(1036, 48);
+            this.Size = new System.Drawing.Size(1036, 57);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptbLoGo)).EndInit();

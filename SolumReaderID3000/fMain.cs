@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace SolumReaderID3000
@@ -18,6 +20,14 @@ namespace SolumReaderID3000
             EnableControl(true);
             this.title.OnProgramExitting += OnProgramExitting;
             btnLoadModel_Click(null, null);
+
+            //maximum form 
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
+            else
+                this.WindowState = FormWindowState.Normal;
         }
 
         private void InitModel()
@@ -120,7 +130,9 @@ namespace SolumReaderID3000
                         if (string.IsNullOrWhiteSpace(item))
                             ClassifyResult.Instance.RunResult = ClassifyResult.eFinalResult.NG;
                         else
+                        {
                             ClassifyResult.Instance.RunResult = ClassifyResult.eFinalResult.OK;
+                        }
 
                         logCSV.SaveLog($"{ClassifyResult.Instance.Total},{currentModel},{item.Replace("\0", "")},{ClassifyResult.Instance.RunResult}");
                     }
@@ -140,6 +152,7 @@ namespace SolumReaderID3000
                 grbReaderParams.Text = Global.readerControl.SerialNo;
                 lbFrameRate.Text = Global.readerControl.FrameRate.ToString("F1");
                 grbReaderParams.Visible = true;
+
             };
             if (pnlParams.InvokeRequired)
                 pnlParams.Invoke(action);
@@ -153,6 +166,7 @@ namespace SolumReaderID3000
             grbReaderParams.Visible = isViewDefault;
             pnlModel.Visible = isViewDefault;
             txtNewModelName.Clear();
+            grbformat.Visible = isViewDefault;
         }
 
         private void btnSaveAsNew_Click(object sender, EventArgs e)
@@ -200,10 +214,14 @@ namespace SolumReaderID3000
 
             Global.readerControl.Exposure = setting.Exposure;
             Global.readerControl.Gain = setting.Gain;
+            Global.length = setting.Length;
+            Global.format = setting.Format;
             ClassifyResult.Instance.Model = setting.ModelName;
             ClassifyResult.Instance.Save();
             currentModel = setting.ModelName;
             cbbModel.Text = currentModel;
+            numberLength.Value= setting.Length;
+            tbformat.Text = setting.Format;
             this.title.TitleName = $"{ClassifyResult.Instance.ApplicationName} [{currentModel}]";
         }
 
@@ -212,8 +230,17 @@ namespace SolumReaderID3000
             DialogResult dr = MessageBox.Show($"Would you want to REMOVE [{currentModel}]?.", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (dr == DialogResult.Yes)
             {
-                SettingParams.Instance.Parameters.RemoveAt(IndexModel);
-                InitModel();
+                GetIndexModel(cbbModel.Text);
+                if (IndexModel != -1)
+                {
+                    SettingParams.Instance.Parameters.RemoveAt(IndexModel);
+                    InitModel();
+                }
+                else
+                {
+                    MessageBox.Show($"Please choose model.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
             }
         }
 
@@ -233,7 +260,10 @@ namespace SolumReaderID3000
             {
                 ModelName = txtNewModelName.Text,
                 Exposure = (float)numExposure.Value,
-                Gain = (float)numGain.Value
+                Gain = (float)numGain.Value,
+                Length =(int) numberLength.Value,
+                Format=tbformat.Text,
+                
             });
             InitModel();
             EnableControl(true);
@@ -241,12 +271,141 @@ namespace SolumReaderID3000
 
         private void btnSaveModel_Click(object sender, EventArgs e)
         {
-            if (IndexModel != -1)
+            if (IndexModel != -1&& IndexModel >= 0)
+            //if (IndexModel > 0)
             {
                 SettingParams.Instance.Parameters[IndexModel].Exposure = (float)numExposure.Value;
                 SettingParams.Instance.Parameters[IndexModel].Gain = (float)numGain.Value;
+                SettingParams.Instance.Parameters[IndexModel].Length=(int) numberLength.Value;
+                SettingParams.Instance.Parameters[IndexModel].Format= tbformat.Text;
+
                 InitModel();
+                MessageBox.Show($"Save setting successfully.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+        public void ShowLog(string msg, bool error = false)
+        {
+
+            Action action = () =>
+            {
+                if (error)
+                {
+                    tblog.SelectionColor = Color.Red;
+                }
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append(DateTime.Now.ToString("yy-MM-dd HH:mm:ss")).Append(" - ").Append(msg).Append(Environment.NewLine);
+
+                tblog.AppendText(sb.ToString());
+                tblog.ScrollToCaret();
+
+                tblog.SelectionColor = Color.Black;
+            };
+
+            if (this.InvokeRequired)
+                this.Invoke(action);
+            else
+                action();
+        }
+        public bool Checklen(string code)
+        {
+            bool result = true;
+            if (code.Length != Global.length)
+            {
+                result = false;
+            }    
+            return result;
+        }
+        public bool CheckFormat(string code)
+        {
+            if (string.IsNullOrEmpty(Global.format))
+            {
+                return true;
+            }
+            
+            // Tách các phần tử trong Global.format dựa trên dấu '%'
+            var formatParts = Global.format.Split('%');
+            int currentIndex = 0;
+
+            foreach (var part in formatParts)
+            {
+                if (string.IsNullOrEmpty(part)) continue; // Bỏ qua các phần tử trống do dấu '%'
+
+                // Tìm vị trí của phần tử trong chuỗi code
+                int foundIndex = code.IndexOf(part, currentIndex);
+                if (foundIndex == -1)
+                {
+                    // Không tìm thấy phần tử hoặc không đúng thứ tự
+                    return false;
+                }
+                // Cập nhật chỉ số bắt đầu tìm kiếm cho phần tử tiếp theo
+                currentIndex = foundIndex + part.Length;
+            }
+
+            return true; // Tất cả các phần tử đều được tìm thấy theo đúng thứ tự
+        }
+        public bool CheckFormat1(string code)
+        {
+            if (string.IsNullOrEmpty(Global.format) || string.IsNullOrEmpty(code))
+            {
+                return false;
+            }
+
+            // Tách các phần tử trong Global.format dựa trên dấu '%'
+            var formatParts = Global.format.Split('%');
+
+            // Kiểm tra phần đầu (nếu không phải `%`)
+            if (!string.IsNullOrEmpty(formatParts[0]) && !code.StartsWith(formatParts[0]))
+            {
+                return false;
+            }
+
+            // Kiểm tra phần cuối (nếu không phải `%`)
+            string lastPart = formatParts[formatParts.Length - 1]; // Truy xuất phần tử cuối
+            if (!string.IsNullOrEmpty(lastPart) && !code.EndsWith(lastPart))
+            {
+                return false;
+            }
+
+            // Kiểm tra các phần giữa (nếu có)
+            int currentIndex = 0;
+            foreach (var part in formatParts)
+            {
+                if (string.IsNullOrEmpty(part)) continue; // Bỏ qua các phần tử trống do dấu '%'
+
+                // Tìm vị trí phần tử trong code
+                int foundIndex = code.IndexOf(part, currentIndex);
+                if (foundIndex == -1)
+                {
+                    return false; // Không tìm thấy phần tử
+                }
+
+                // Cập nhật chỉ số bắt đầu tìm kiếm
+                currentIndex = foundIndex + part.Length;
+            }
+
+            return true; // Tất cả các phần tử đều được tìm thấy theo đúng thứ tự
+        }
+
+        public bool CheckFormatWithRegex( string code)
+        {
+            if (string.IsNullOrEmpty(Global.format) || string.IsNullOrEmpty(code))
+            {
+                return false;
+            }
+
+            // Thay dấu '%' trong format thành regex tương ứng
+            string regexPattern = "^" + Regex.Escape(Global.format).Replace("%", ".*") + "$";
+
+            // So khớp code với regex pattern
+            return Regex.IsMatch(code, regexPattern);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+          bool a =  CheckFormatWithRegex("Model@sdadsasol@umsadhsauhms");
+          bool b = Checklen("Model@sdadsasol@umsadhsauhms");
+
         }
     }
 }
