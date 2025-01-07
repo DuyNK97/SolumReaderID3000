@@ -39,7 +39,8 @@ public class UDPControl
 
     private void ReceiveMessages()
     {
-        IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(localIpAddress), receivePort); // Lắng nghe trên cổng nhận 2025
+        //IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(localIpAddress), receivePort); // Lắng nghe trên cổng nhận 2025
+        IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, receivePort); // Lắng nghe trên cổng nhận 2025
         Console.WriteLine("Chương trình đang chờ nhận tin nhắn...");
 
         while (true)
@@ -51,7 +52,7 @@ public class UDPControl
                 string message = Encoding.UTF8.GetString(data);
 
                 // Kiểm tra nếu địa chỉ IP nguồn không phải của chính máy mình và cổng không phải 2024
-                if ( remoteEndPoint.Port == sendPort)
+                if (remoteEndPoint.Port == sendPort)
                 {
                     // Nếu có dữ liệu, gọi sự kiện DataReceived
                     DataReceived?.Invoke(message, remoteEndPoint.Address.ToString(), remoteEndPoint.Port);
