@@ -36,6 +36,12 @@
             this.ptbLoGo = new System.Windows.Forms.PictureBox();
             this.tblog = new System.Windows.Forms.RichTextBox();
             this.grbReaderParams = new System.Windows.Forms.GroupBox();
+            this.grbformat = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.tbformat = new System.Windows.Forms.TextBox();
+            this.numberLength = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             this.numGain = new System.Windows.Forms.NumericUpDown();
             this.numExposure = new System.Windows.Forms.NumericUpDown();
             this.btnRemove = new System.Windows.Forms.Button();
@@ -54,24 +60,18 @@
             this.cbbModel = new System.Windows.Forms.ComboBox();
             this.btnLoadModel = new System.Windows.Forms.Button();
             this.title = new SconnectCamdeco.Title();
-            this.grbformat = new System.Windows.Forms.GroupBox();
-            this.tbformat = new System.Windows.Forms.TextBox();
-            this.numberLength = new System.Windows.Forms.NumericUpDown();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogCSV)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlParams.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptbLoGo)).BeginInit();
             this.grbReaderParams.SuspendLayout();
+            this.grbformat.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numberLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numGain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numExposure)).BeginInit();
             this.grbSaveNewModel.SuspendLayout();
             this.pnlModel.SuspendLayout();
-            this.grbformat.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numberLength)).BeginInit();
             this.SuspendLayout();
             // 
             // imageBox1
@@ -179,6 +179,90 @@
             this.grbReaderParams.TabStop = false;
             this.grbReaderParams.Text = "READER";
             this.grbReaderParams.Visible = false;
+            // 
+            // grbformat
+            // 
+            this.grbformat.Controls.Add(this.button1);
+            this.grbformat.Controls.Add(this.tbformat);
+            this.grbformat.Controls.Add(this.numberLength);
+            this.grbformat.Controls.Add(this.label7);
+            this.grbformat.Controls.Add(this.label8);
+            this.grbformat.ForeColor = System.Drawing.Color.White;
+            this.grbformat.Location = new System.Drawing.Point(10, 170);
+            this.grbformat.Name = "grbformat";
+            this.grbformat.Size = new System.Drawing.Size(325, 131);
+            this.grbformat.TabIndex = 11;
+            this.grbformat.TabStop = false;
+            this.grbformat.Text = "Format Code";
+            this.grbformat.Visible = false;
+            // 
+            // button1
+            // 
+            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.button1.ForeColor = System.Drawing.Color.Black;
+            this.button1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.button1.Location = new System.Drawing.Point(234, 13);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(85, 50);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "Test";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // tbformat
+            // 
+            this.tbformat.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.tbformat.Location = new System.Drawing.Point(89, 64);
+            this.tbformat.Name = "tbformat";
+            this.tbformat.Size = new System.Drawing.Size(232, 23);
+            this.tbformat.TabIndex = 9;
+            // 
+            // numberLength
+            // 
+            this.numberLength.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.numberLength.Location = new System.Drawing.Point(92, 30);
+            this.numberLength.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.numberLength.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numberLength.Name = "numberLength";
+            this.numberLength.Size = new System.Drawing.Size(120, 23);
+            this.numberLength.TabIndex = 8;
+            this.numberLength.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numberLength.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.label7.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label7.Location = new System.Drawing.Point(20, 67);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(56, 17);
+            this.label7.TabIndex = 4;
+            this.label7.Text = "Format:";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.label8.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label8.Location = new System.Drawing.Point(20, 30);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(56, 17);
+            this.label8.TabIndex = 3;
+            this.label8.Text = "Length:";
             // 
             // numGain
             // 
@@ -422,90 +506,6 @@
             this.title.TitleLogo = global::SolumReaderID3000.Properties.Resources.solum;
             this.title.TitleName = "SOLUM QR READER";
             // 
-            // grbformat
-            // 
-            this.grbformat.Controls.Add(this.button1);
-            this.grbformat.Controls.Add(this.tbformat);
-            this.grbformat.Controls.Add(this.numberLength);
-            this.grbformat.Controls.Add(this.label7);
-            this.grbformat.Controls.Add(this.label8);
-            this.grbformat.ForeColor = System.Drawing.Color.White;
-            this.grbformat.Location = new System.Drawing.Point(10, 170);
-            this.grbformat.Name = "grbformat";
-            this.grbformat.Size = new System.Drawing.Size(325, 131);
-            this.grbformat.TabIndex = 11;
-            this.grbformat.TabStop = false;
-            this.grbformat.Text = "Format Code";
-            this.grbformat.Visible = false;
-            // 
-            // tbformat
-            // 
-            this.tbformat.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.tbformat.Location = new System.Drawing.Point(89, 64);
-            this.tbformat.Name = "tbformat";
-            this.tbformat.Size = new System.Drawing.Size(232, 23);
-            this.tbformat.TabIndex = 9;
-            // 
-            // numberLength
-            // 
-            this.numberLength.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.numberLength.Location = new System.Drawing.Point(92, 30);
-            this.numberLength.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.numberLength.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numberLength.Name = "numberLength";
-            this.numberLength.Size = new System.Drawing.Size(120, 23);
-            this.numberLength.TabIndex = 8;
-            this.numberLength.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.numberLength.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.label7.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label7.Location = new System.Drawing.Point(20, 67);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(56, 17);
-            this.label7.TabIndex = 4;
-            this.label7.Text = "Format:";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.label8.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label8.Location = new System.Drawing.Point(20, 30);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(56, 17);
-            this.label8.TabIndex = 3;
-            this.label8.Text = "Length:";
-            // 
-            // button1
-            // 
-            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.button1.ForeColor = System.Drawing.Color.Black;
-            this.button1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.button1.Location = new System.Drawing.Point(234, 13);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(85, 50);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "Test";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // fMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -525,14 +525,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.ptbLoGo)).EndInit();
             this.grbReaderParams.ResumeLayout(false);
             this.grbReaderParams.PerformLayout();
+            this.grbformat.ResumeLayout(false);
+            this.grbformat.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numberLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numGain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numExposure)).EndInit();
             this.grbSaveNewModel.ResumeLayout(false);
             this.grbSaveNewModel.PerformLayout();
             this.pnlModel.ResumeLayout(false);
-            this.grbformat.ResumeLayout(false);
-            this.grbformat.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numberLength)).EndInit();
             this.ResumeLayout(false);
 
         }

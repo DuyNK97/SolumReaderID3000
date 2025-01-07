@@ -59,6 +59,7 @@
     <Compile Include="Classes\Global.cs" />
     <Compile Include="Classes\ReaderControl.cs" />
     <Compile Include="Classes\SettingParams.cs" />
+    <Compile Include="Classes\UDPControl.cs" />
     <Compile Include="fMain.cs">
       <SubType>Form</SubType>
     </Compile>

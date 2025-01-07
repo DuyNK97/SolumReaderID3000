@@ -1,5 +1,7 @@
 ﻿using MSFactoryDLL;
 using System;
+using SolumReaderID3000.Classes;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -11,8 +13,10 @@ namespace SolumReaderID3000
 {
     public partial class fMain : Form
     {
+        UDPControl udpChat ;
         public fMain()
         {
+            udpChat = new UDPControl("192.168.1.14");
             InitializeComponent();
             InitReader();
             InitModel();
@@ -28,6 +32,8 @@ namespace SolumReaderID3000
             }
             else
                 this.WindowState = FormWindowState.Normal;
+
+            udpChat.StartServer();
         }
 
         private void InitModel()
@@ -405,7 +411,10 @@ namespace SolumReaderID3000
         {
           bool a =  CheckFormatWithRegex("Model@sdadsasol@umsadhsauhms");
           bool b = Checklen("Model@sdadsasol@umsadhsauhms");
+            udpChat.SendMessage("Model@sdadsasol@umsadhsauhms");
 
         }
+
+
     }
 }
