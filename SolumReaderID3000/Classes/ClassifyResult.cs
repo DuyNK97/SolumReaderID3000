@@ -12,12 +12,31 @@ namespace SolumReaderID3000
         public string Model { get; set; }
         public string CreationTime { get; set; } = string.Empty;
         public string ApplicationName { get; set; } = "SOLUM GATHERING DATA";
+        private string _ServerIP { get; set; } = "127.0.0.1";
+        private bool _SaveRunImage= true;
+        public bool SaveRunImage { get => _SaveRunImage; set => _SaveRunImage = value; }
+        public string ServerIP { get => _ServerIP; set => _ServerIP = value; }    
+        private int _RPort= 2024;
+        private int _Sport= 2025;
+        public int RPort { get => _RPort; set => _RPort = value; }
+        public int Sport { get => _Sport; set => _Sport = value; }
+
+
+        public string SerialPort { get; set; } = "COM4";
+        public int baudrate { get; set; } = 115200;
+
+
+        //public int TotalLot { get; set; }
+
         public enum eFinalResult
         {
             OK,
             NG,
         }
-        public ClassifyResult() { }
+        public ClassifyResult() {
+        
+
+        }
         private eFinalResult _runResult;
         [XmlIgnore]
         public eFinalResult RunResult
@@ -29,6 +48,7 @@ namespace SolumReaderID3000
                 switch (value)
                 {
                     case eFinalResult.OK:
+                        
                         OK++;
                         break;
                     case eFinalResult.NG:
@@ -43,6 +63,11 @@ namespace SolumReaderID3000
 
         [XmlIgnore]
         public int Total { get { return OK + NG; } }
+
+        [XmlIgnore]
+        public int TotalLot { get { return (int)(OK / (double)Global.Modelqty); } }
+
+
         [XmlIgnore]
         public double NGPercent
         {
@@ -66,6 +91,15 @@ namespace SolumReaderID3000
         {
             OK = NG = 0;
         }
+
+        public void ClearData()
+        {
+            OK = 0;
+            NG = 0;            
+            ProperChanged("RunResult");
+        }
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void ProperChanged([CallerMemberName] string caller = "")

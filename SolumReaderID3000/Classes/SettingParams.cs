@@ -26,6 +26,8 @@ namespace SolumReaderID3000
 
         public int Length {  get; set; }    
         public string Format {  get; set; } 
+
+        public int ModelQty { get; set; }
     }
 
 }

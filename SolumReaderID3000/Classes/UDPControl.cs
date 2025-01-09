@@ -7,8 +7,8 @@ using System;
 public class UDPControl
 {
     private UdpClient udpClient;
-    private int receivePort = 2025;   // Cổng nhận dữ liệu (dành cho server)
-    private int sendPort = 2024;      // Cổng gửi dữ liệu (dành cho client)
+    private int receivePort = 2024;   // Cổng nhận dữ liệu (dành cho server)
+    private int sendPort = 2025;      // Cổng gửi dữ liệu (dành cho client)
     private string localIpAddress;
     private string remoteIpAddress = "192.168.1.14"; // Địa chỉ IP cố định
 

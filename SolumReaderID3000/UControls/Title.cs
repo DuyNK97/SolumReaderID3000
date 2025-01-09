@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SolumReaderID3000;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -13,7 +14,7 @@ namespace SconnectCamdeco
             //mouseHoverEvt.CreateMouseHoverEvent(panel2);
             lbTimer.Text = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
         }
-
+        public event Action<string> SerialPortSettingsChangedMain;
         private Image titleLogo;
         public Image TitleLogo
         {
@@ -71,6 +72,20 @@ namespace SconnectCamdeco
             else
                 act();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Setting appSetting = new Setting();
+            appSetting.SerialPortSettingsChanged += SettingsForm_SerialPortSettingsChanged;
+            appSetting.ShowDialog();
+
+        }
+        private void SettingsForm_SerialPortSettingsChanged(string newPort)
+        {
+            // Reinitialize serial port with the new settings
+            SerialPortSettingsChangedMain?.Invoke(ClassifyResult.Instance.SerialPort);
+        }
+
     }
 
 

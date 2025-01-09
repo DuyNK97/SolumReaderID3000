@@ -1,97 +1,133 @@
-﻿using MSFactoryDLL;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.RegularExpressions;
 
 namespace SolumReaderID3000.Classes
 {
     public class ControlUDP
     {
-        private UdpClient _udpClient;
-        private IPEndPoint _serverEndPoint;
-        private Thread _receiveThread;
-        private bool _isRunning;
+        private UdpClient udpClient;
+        private IPEndPoint localEndPoint;      // Địa chỉ IP và cổng lắng nghe của server
+        private IPEndPoint remoteEndPoint;     // Địa chỉ IP và cổng của client
+        private List<IPEndPoint> clientList;   // Danh sách các client đang kết nối (UDP không có khái niệm "kết nối")
 
-        public delegate void MessageReceivedHandler(string message, IPEndPoint sender);
-        public event MessageReceivedHandler MessageReceivedEvent;
-
-        public ControlUDP(string serverIP, int serverPort)
+        public ControlUDP()
         {
-            _serverEndPoint = new IPEndPoint(IPAddress.Parse(serverIP), serverPort);
-            _udpClient = new UdpClient();
-            _udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            _isRunning = true;
+            localEndPoint = new IPEndPoint(IPAddress.Parse(ClassifyResult.Instance.ServerIP), ClassifyResult.Instance.RPort);
+            remoteEndPoint = new IPEndPoint(IPAddress.Parse(ClassifyResult.Instance.ServerIP), ClassifyResult.Instance.Sport);  // Sử dụng địa chỉ IP của máy tính này nếu chạy trên cùng một PC
 
-            // Start receiving thread
-            _receiveThread = new Thread(ReceiveMessages);
-            _receiveThread.IsBackground = true;
-            _receiveThread.Start();
+            udpClient = new UdpClient(ClassifyResult.Instance.RPort);  // Khởi tạo UdpClient để lắng nghe trên cổng receivePort
+            clientList = new List<IPEndPoint>();
         }
 
-        // Send a message to the server
+        // Bắt đầu lắng nghe các gói UDP
+        public void StartReceiving()
+        {
+            Thread receiveThread = new Thread(ReceiveMessages);
+            receiveThread.IsBackground = true;  // Đảm bảo thread nhận không cản trở chương trình chính
+            receiveThread.Start();
+        }
+
+        // Gửi tin nhắn tới client
         public void SendMessage(string message)
         {
-            try
-            {
-                byte[] data = Encoding.UTF8.GetBytes(message);
-                _udpClient.Send(data, data.Length, _serverEndPoint);
-                Console.WriteLine($"Message sent to {_serverEndPoint}: {message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error sending message: {ex.Message}");
-            }
+            byte[] data = Encoding.UTF8.GetBytes(message);
+            udpClient.Send(data, data.Length, remoteEndPoint);  // Gửi dữ liệu tới remoteEndPoint (client)
+            Console.WriteLine($"Gửi: {message}");
         }
 
-        // Receive messages in a background thread
+        // Hàm nhận tin nhắn
         private void ReceiveMessages()
         {
-            try
+            while (true)
             {
-                while (_isRunning)
+                try
                 {
-                    IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                    byte[] data = _udpClient.Receive(ref remoteEndPoint);
-
+                    // Nhận dữ liệu từ bất kỳ địa chỉ IP nào (dùng IPEndPoint.Any)
+                    byte[] data = udpClient.Receive(ref localEndPoint);  // Nhận dữ liệu và lấy địa chỉ client gửi
                     string message = Encoding.UTF8.GetString(data);
-                    MessageReceivedEvent?.Invoke(message, remoteEndPoint);
 
-                    Console.WriteLine($"Message received from {remoteEndPoint}: {message}");
+                    // Xử lý tin nhắn nhận được
+                    if (!string.IsNullOrEmpty(message))
+                    {
+                        Console.WriteLine($"Nhận từ {localEndPoint.Address}:{localEndPoint.Port} - {message}");
+                        // Gọi sự kiện hoặc phương thức phân tích dữ liệu
+                        AnalysisReceiveData(message, localEndPoint);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Lỗi khi nhận dữ liệu: " + ex.Message);
                 }
             }
-            catch (SocketException ex) when (ex.SocketErrorCode == SocketError.Interrupted)
+        }
+
+        // Phân tích dữ liệu nhận được từ client
+        private void AnalysisReceiveData(string message, IPEndPoint clientEndPoint)
+        {
+            if (message.Contains("RS"))
             {
-                Console.WriteLine("UDP receiving thread stopped.");
+                string[] listFrame = message.Split(new string[] { "xxx" }, StringSplitOptions.None);
+                for (int i = 0; i < listFrame.Length; i++)
+                {
+                    if (string.IsNullOrEmpty(listFrame[i])) continue;
+                    string[] listData = listFrame[i].Split(',');
+                    if (listData[0] == "RS")
+                    {
+                        UpdateDataResult(listFrame[i]);
+                        AddMessage($"Client {clientEndPoint.ToString()} gửi: {listFrame[i]}");
+                    }
+                }
             }
-            catch (Exception ex)
+            else if (message.Contains("ST"))
             {
-                Console.WriteLine($"Error receiving message: {ex.Message}");
+                string[] listFrame = message.Split(new string[] { "xxx" }, StringSplitOptions.None);
+                for (int i = 0; i < listFrame.Length; i++)
+                {
+                    if (string.IsNullOrEmpty(listFrame[i])) continue;
+                    string[] listData = listFrame[i].Split(',');
+                    if (listData[0] == "ST")
+                    {
+                        UpdateStatus(listFrame[i]);
+                    }
+                }
             }
         }
 
-        // Stop the UDP client
+        // Cập nhật kết quả nhận được
+        private void UpdateDataResult(string message)
+        {
+            Console.WriteLine($"Cập nhật dữ liệu: {message}");
+        }
+
+        // Cập nhật trạng thái nhận được
+        private void UpdateStatus(string message)
+        {
+            Console.WriteLine($"Cập nhật trạng thái: {message}");
+        }
+
+        // Hàm ghi lại tin nhắn (đối với việc debug hoặc logging)
+        private void AddMessage(string s)
+        {
+            Console.WriteLine(s);  // Chỉ đơn giản in ra console, có thể thay bằng log thực tế
+        }
+
+        // Đóng kết nối UDP
         public void Close()
         {
-            try
-            {
-                _isRunning = false;
-                _udpClient.Close();
-                _receiveThread?.Join();
-                Console.WriteLine("UDP client closed.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error closing UDP client: {ex.Message}");
-            }
-        }
-        void AddMessage(string s)
-        {
-            ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM, s);
+            udpClient.Close();
         }
 
+        // Đóng kết nối và dọn dẹp khi kết thúc
+        ~ControlUDP()
+        {
+            udpClient.Close();
+        }
     }
 }

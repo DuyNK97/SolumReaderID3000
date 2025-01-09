@@ -1,4 +1,5 @@
 ﻿using MSFactoryDLL;
+using SolumReaderID3000.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,7 +83,7 @@ namespace SolumReaderID3000
             if (type == typeof(ClassifyResult))
                 return string.Format($"{Application.StartupPath}\\UserConfig\\ClassifyResult.xml");
             if (type == typeof(SettingParams))
-                return string.Format($"{Application.StartupPath}\\UserConfig\\SettingParams.xml");
+                return string.Format($"{Application.StartupPath}\\UserConfig\\SettingParams.xml");         
             return null;
         }
     }

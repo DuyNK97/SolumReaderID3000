@@ -11,5 +11,10 @@ namespace SolumReaderID3000
         public static ReaderControl readerControl;
         public static int length = 20;
         public static string format = "";
+        public static bool IsExits;
+
+        public static string Model;
+        public static int Modelqty;
+
     }
 }
