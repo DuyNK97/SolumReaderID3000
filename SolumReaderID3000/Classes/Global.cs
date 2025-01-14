@@ -15,9 +15,21 @@ namespace SolumReaderID3000
 
         public static string Model;
         public static int Modelqty;
-
-
         public static List<string> modelList = new List<string>();
+
+        //label variable
+        public static string date {  get; set; }
+        public static string MODEL {  get; set; }
+        public static string seri {  get; set; }
+        public static string SECCODE1 {  get; set; }
+        public static string SERI {  get; set; }
+        public static string model {  get; set; }
+        public static string DATE {  get; set; }
+        public static int Qty {  get; set; }
+
+
+
+
 
         public static bool CheckDuplicateAndAdd(string newItem)
         {
@@ -40,6 +52,9 @@ namespace SolumReaderID3000
                 }
             }
         }
+
+
+       
 
 
     }

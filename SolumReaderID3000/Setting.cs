@@ -79,8 +79,18 @@ namespace SolumReaderID3000
             if (changecom)
             {
                 SerialPortSettingsChanged?.Invoke(ClassifyResult.Instance.SerialPort);
-            }    
-          
+            }   
+            
+            Global.date= tbdate.Text;
+            Global.MODEL=tbMODEL.Text;
+            Global.seri=tbseri.Text;
+            Global.SECCODE1=tbseccode1.Text;
+            Global.SERI=txtSERI.Text;          
+            Global.DATE=txtDATE.Text;
+            Global.Qty =(int) numqty.Value;
+
+
+
 
         }
         public static bool IsValidIPAddress(string ipAddress)

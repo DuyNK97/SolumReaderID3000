@@ -30,12 +30,13 @@
         {
             this.dgvLogCSV = new System.Windows.Forms.DataGridView();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.imageBox1 = new MSFactoryDLL.ImageBox();
             this.pnlParams = new System.Windows.Forms.Panel();
             this.tblog = new System.Windows.Forms.RichTextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ucResult1 = new SolumReaderID3000.UControls.ucResult();
             this.grbReaderParams = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lblWeight = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.groupreader = new System.Windows.Forms.GroupBox();
             this.numGain = new System.Windows.Forms.NumericUpDown();
             this.numExposure = new System.Windows.Forms.NumericUpDown();
@@ -63,15 +64,27 @@
             this.pnlModel = new System.Windows.Forms.Panel();
             this.cbbModel = new System.Windows.Forms.ComboBox();
             this.btnLoadModel = new System.Windows.Forms.Button();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.imageBox1 = new MSFactoryDLL.ImageBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnOpen = new System.Windows.Forms.Button();
+            this.txtFolderPath = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txtIdenticalCopies = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.txtSerializedCopies = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.cboPrinters = new System.Windows.Forms.ComboBox();
+            this.btnprint = new System.Windows.Forms.Button();
+            this.ucResult1 = new SolumReaderID3000.UControls.ucResult();
             this.title = new SconnectCamdeco.Title();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.lblWeight = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogCSV)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlParams.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.grbReaderParams.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.groupreader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numExposure)).BeginInit();
@@ -81,7 +94,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numberLength)).BeginInit();
             this.grbSaveNewModel.SuspendLayout();
             this.pnlModel.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvLogCSV
@@ -100,8 +114,8 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 350F));
             this.tableLayoutPanel1.Controls.Add(this.dgvLogCSV, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.imageBox1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.pnlParams, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 50);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -110,17 +124,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 26.8F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1108, 793);
             this.tableLayoutPanel1.TabIndex = 1;
-            // 
-            // imageBox1
-            // 
-            this.imageBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageBox1.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(67)))), ((int)(((byte)(78)))));
-            this.imageBox1.GridColorAlternate = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(67)))), ((int)(((byte)(78)))));
-            this.imageBox1.IsViewPlusMarker = false;
-            this.imageBox1.Location = new System.Drawing.Point(3, 3);
-            this.imageBox1.Name = "imageBox1";
-            this.imageBox1.Size = new System.Drawing.Size(752, 574);
-            this.imageBox1.TabIndex = 1;
             // 
             // pnlParams
             // 
@@ -161,15 +164,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Statistical";
             // 
-            // ucResult1
-            // 
-            this.ucResult1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ucResult1.Location = new System.Drawing.Point(3, 16);
-            this.ucResult1.Margin = new System.Windows.Forms.Padding(4);
-            this.ucResult1.Name = "ucResult1";
-            this.ucResult1.Size = new System.Drawing.Size(338, 200);
-            this.ucResult1.TabIndex = 0;
-            // 
             // grbReaderParams
             // 
             this.grbReaderParams.Controls.Add(this.groupBox2);
@@ -185,6 +179,41 @@
             this.grbReaderParams.TabStop = false;
             this.grbReaderParams.Text = "Model Config";
             this.grbReaderParams.Visible = false;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.lblWeight);
+            this.groupBox2.Controls.Add(this.label4);
+            this.groupBox2.ForeColor = System.Drawing.Color.White;
+            this.groupBox2.Location = new System.Drawing.Point(10, 293);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(325, 44);
+            this.groupBox2.TabIndex = 14;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Weight";
+            this.groupBox2.Visible = false;
+            // 
+            // lblWeight
+            // 
+            this.lblWeight.AutoSize = true;
+            this.lblWeight.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWeight.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.lblWeight.Location = new System.Drawing.Point(124, 13);
+            this.lblWeight.Name = "lblWeight";
+            this.lblWeight.Size = new System.Drawing.Size(60, 24);
+            this.lblWeight.TabIndex = 4;
+            this.lblWeight.Text = "0.000";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label4.Location = new System.Drawing.Point(190, 13);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(35, 24);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Kg";
             // 
             // groupreader
             // 
@@ -564,6 +593,158 @@
             this.btnLoadModel.UseVisualStyleBackColor = true;
             this.btnLoadModel.Click += new System.EventHandler(this.btnLoadModel_Click);
             // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.28723F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.71276F));
+            this.tableLayoutPanel2.Controls.Add(this.groupBox3, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.imageBox1, 0, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(752, 574);
+            this.tableLayoutPanel2.TabIndex = 19;
+            // 
+            // imageBox1
+            // 
+            this.imageBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageBox1.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(67)))), ((int)(((byte)(78)))));
+            this.imageBox1.GridColorAlternate = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(67)))), ((int)(((byte)(78)))));
+            this.imageBox1.IsViewPlusMarker = false;
+            this.imageBox1.Location = new System.Drawing.Point(3, 3);
+            this.imageBox1.Name = "imageBox1";
+            this.imageBox1.Size = new System.Drawing.Size(500, 568);
+            this.imageBox1.TabIndex = 2;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.btnprint);
+            this.groupBox3.Controls.Add(this.btnOpen);
+            this.groupBox3.Controls.Add(this.txtFolderPath);
+            this.groupBox3.Controls.Add(this.label9);
+            this.groupBox3.Controls.Add(this.txtIdenticalCopies);
+            this.groupBox3.Controls.Add(this.label10);
+            this.groupBox3.Controls.Add(this.txtSerializedCopies);
+            this.groupBox3.Controls.Add(this.label11);
+            this.groupBox3.Controls.Add(this.label12);
+            this.groupBox3.Controls.Add(this.cboPrinters);
+            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox3.ForeColor = System.Drawing.Color.White;
+            this.groupBox3.Location = new System.Drawing.Point(509, 3);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(240, 568);
+            this.groupBox3.TabIndex = 8;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Printing";
+            // 
+            // btnOpen
+            // 
+            this.btnOpen.ForeColor = System.Drawing.Color.Black;
+            this.btnOpen.Location = new System.Drawing.Point(9, 42);
+            this.btnOpen.Name = "btnOpen";
+            this.btnOpen.Size = new System.Drawing.Size(75, 23);
+            this.btnOpen.TabIndex = 9;
+            this.btnOpen.Text = "Open File";
+            this.btnOpen.UseVisualStyleBackColor = true;
+            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
+            // 
+            // txtFolderPath
+            // 
+            this.txtFolderPath.Location = new System.Drawing.Point(75, 16);
+            this.txtFolderPath.Name = "txtFolderPath";
+            this.txtFolderPath.ReadOnly = true;
+            this.txtFolderPath.Size = new System.Drawing.Size(161, 20);
+            this.txtFolderPath.TabIndex = 13;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.ForeColor = System.Drawing.Color.White;
+            this.label9.Location = new System.Drawing.Point(8, 22);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(68, 13);
+            this.label9.TabIndex = 12;
+            this.label9.Text = "&Label Folder:";
+            // 
+            // txtIdenticalCopies
+            // 
+            this.txtIdenticalCopies.Location = new System.Drawing.Point(98, 97);
+            this.txtIdenticalCopies.Name = "txtIdenticalCopies";
+            this.txtIdenticalCopies.Size = new System.Drawing.Size(112, 20);
+            this.txtIdenticalCopies.TabIndex = 3;
+            this.txtIdenticalCopies.Text = "1";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.ForeColor = System.Drawing.Color.White;
+            this.label10.Location = new System.Drawing.Point(6, 126);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(90, 13);
+            this.label10.TabIndex = 4;
+            this.label10.Text = "&Serialized Copies:";
+            // 
+            // txtSerializedCopies
+            // 
+            this.txtSerializedCopies.Location = new System.Drawing.Point(98, 123);
+            this.txtSerializedCopies.Name = "txtSerializedCopies";
+            this.txtSerializedCopies.Size = new System.Drawing.Size(112, 20);
+            this.txtSerializedCopies.TabIndex = 5;
+            this.txtSerializedCopies.Text = "1";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(6, 100);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(85, 13);
+            this.label11.TabIndex = 2;
+            this.label11.Text = "&Identical Copies:";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.ForeColor = System.Drawing.Color.White;
+            this.label12.Location = new System.Drawing.Point(6, 73);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(40, 13);
+            this.label12.TabIndex = 0;
+            this.label12.Text = "P&rinter:";
+            // 
+            // cboPrinters
+            // 
+            this.cboPrinters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboPrinters.FormattingEnabled = true;
+            this.cboPrinters.Location = new System.Drawing.Point(52, 70);
+            this.cboPrinters.Name = "cboPrinters";
+            this.cboPrinters.Size = new System.Drawing.Size(183, 21);
+            this.cboPrinters.Sorted = true;
+            this.cboPrinters.TabIndex = 1;
+            // 
+            // btnprint
+            // 
+            this.btnprint.ForeColor = System.Drawing.Color.Black;
+            this.btnprint.Location = new System.Drawing.Point(9, 158);
+            this.btnprint.Name = "btnprint";
+            this.btnprint.Size = new System.Drawing.Size(75, 23);
+            this.btnprint.TabIndex = 14;
+            this.btnprint.Text = "print";
+            this.btnprint.UseVisualStyleBackColor = true;
+            this.btnprint.Click += new System.EventHandler(this.btnprint_Click);
+            // 
+            // ucResult1
+            // 
+            this.ucResult1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ucResult1.Location = new System.Drawing.Point(3, 16);
+            this.ucResult1.Margin = new System.Windows.Forms.Padding(4);
+            this.ucResult1.Name = "ucResult1";
+            this.ucResult1.Size = new System.Drawing.Size(338, 200);
+            this.ucResult1.TabIndex = 0;
+            // 
             // title
             // 
             this.title.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(55)))), ((int)(((byte)(59)))));
@@ -575,41 +756,6 @@
             this.title.TabIndex = 0;
             this.title.TitleLogo = global::SolumReaderID3000.Properties.Resources.solum;
             this.title.TitleName = "SOLUM QR READER";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.lblWeight);
-            this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.ForeColor = System.Drawing.Color.White;
-            this.groupBox2.Location = new System.Drawing.Point(10, 293);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(325, 44);
-            this.groupBox2.TabIndex = 14;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Weight";
-            this.groupBox2.Visible = false;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label4.Location = new System.Drawing.Point(190, 13);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(35, 24);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "Kg";
-            // 
-            // lblWeight
-            // 
-            this.lblWeight.AutoSize = true;
-            this.lblWeight.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWeight.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblWeight.Location = new System.Drawing.Point(124, 13);
-            this.lblWeight.Name = "lblWeight";
-            this.lblWeight.Size = new System.Drawing.Size(60, 24);
-            this.lblWeight.TabIndex = 4;
-            this.lblWeight.Text = "0.000";
             // 
             // fMain
             // 
@@ -629,6 +775,8 @@
             this.pnlParams.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.grbReaderParams.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupreader.ResumeLayout(false);
             this.groupreader.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGain)).EndInit();
@@ -642,14 +790,14 @@
             this.grbSaveNewModel.ResumeLayout(false);
             this.grbSaveNewModel.PerformLayout();
             this.pnlModel.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private MSFactoryDLL.ImageBox imageBox1;
         private System.Windows.Forms.DataGridView dgvLogCSV;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel pnlParams;
@@ -688,6 +836,19 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label lblWeight;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private MSFactoryDLL.ImageBox imageBox1;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button btnOpen;
+        private System.Windows.Forms.TextBox txtFolderPath;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox txtIdenticalCopies;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox txtSerializedCopies;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.ComboBox cboPrinters;
+        private System.Windows.Forms.Button btnprint;
     }
 }
 

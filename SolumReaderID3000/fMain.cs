@@ -15,6 +15,8 @@ using System.Linq;
 using System.Drawing.Imaging;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 using System.IO.Ports;
+using Seagull.BarTender.Print;
+using System.Collections;
 
 namespace SolumReaderID3000
 {
@@ -23,6 +25,17 @@ namespace SolumReaderID3000
         UDPControl udpChat;
         ControlTCP _client = new ControlTCP();//tcpip
         PLCInterface _plcInterface = new PLCInterface();
+
+        //prnt label
+        private LabelFormatDocument format = null;
+        private const string appName = "Label Print";
+        private const string dataSourced = "Data Sourced";
+        private Engine engine = null;
+        Hashtable listItems; // A hash table containing ListViewItems and indexed by format name.
+                             // It keeps track of what formats have had their image loaded.
+        Queue<int> generationQueue; // A queue containing indexes into browsingFormats
+                                    // to facilitate the generation of thumbnails
+        private List<string> templateVariables = new List<string>();
 
         public fMain()
         {
@@ -49,6 +62,35 @@ namespace SolumReaderID3000
             //}
             //else
             //    this.WindowState = FormWindowState.Normal;
+            try
+            {
+                engine = new Engine(true);
+            }
+            catch (PrintEngineException exception)
+            {
+                // If the engine is unable to start, a PrintEngineException will be thrown.
+                MessageBox.Show(this, exception.Message, appName);
+                this.Close(); // Close this app. We cannot run without connection to an engine.
+                return;
+            }
+
+            // Get the list of printers
+            Printers printers = new Printers();
+            foreach (Seagull.BarTender.Print.Printer printer in printers)
+            {
+                cboPrinters.Items.Add(printer.PrinterName);
+            }
+
+            if (printers.Count > 0)
+            {
+                // Automatically select the default printer.
+                cboPrinters.SelectedItem = printers.Default.PrinterName;
+            }
+            listItems = new System.Collections.Hashtable();
+            generationQueue = new Queue<int>();
+            txtIdenticalCopies.MaxLength = 9;
+            txtSerializedCopies.MaxLength = 9;
+
 
 
             this.title.TitleName = $"{ClassifyResult.Instance.ApplicationName}";
@@ -808,9 +850,139 @@ namespace SolumReaderID3000
             };
         }
 
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "BarTender Files (*.btw)|*.btw"; // Chỉ hiển thị tệp .btw
+                openFileDialog.Title = "Select a BarTender file";
 
+                // Hiển thị hộp thoại chọn file
+                DialogResult result = openFileDialog.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    lock (generationQueue)
+                    {
+                        generationQueue.Clear();
+                    }
+                    listItems.Clear();
 
+                    // Lấy đường dẫn tệp được chọn
+                    string selectedFilePath = openFileDialog.FileName;
+                    txtFolderPath.Text = selectedFilePath;
 
+                    // Mở file và lấy các biến
+                    format = engine.Documents.Open(selectedFilePath);
+                    if (format != null)
+                    {
+                        // Lưu các biến substring vào danh sách
+                        templateVariables.Clear(); // Xóa các biến cũ nếu có
+                        foreach (var substring in format.SubStrings)
+                        {
+                            templateVariables.Add(substring.Name);
+                        }
 
+                    }
+                }
+            }
+
+        }
+
+        private void PrintLabel( string date,string MODEL,string seri,string SECCODE1,string SERI,string Model, string DATE,int qty)
+        {
+            lock (engine)
+            {
+                bool success = true;
+
+                // Kiểm tra và thiết lập số lượng bản sao
+                if (format.PrintSetup.SupportsIdenticalCopies)
+                {
+                    int copies = 1;
+                    success = Int32.TryParse(txtIdenticalCopies.Text, out copies) && (copies >= 1);
+                    if (!success)
+                        MessageBox.Show(this, "Identical Copies must be an integer greater than or equal to 1.", appName);
+                    else
+                        format.PrintSetup.IdenticalCopiesOfLabel = copies;
+                }
+
+                if (success && format.PrintSetup.SupportsSerializedLabels)
+                {
+                    int copies = 1;
+                    success = Int32.TryParse(txtSerializedCopies.Text, out copies) && (copies >= 1);
+                    if (!success)
+                    {
+                        MessageBox.Show(this, "Serialized Copies must be an integer greater than or equal to 1.", appName);
+                    }
+                    else
+                    {
+                        format.PrintSetup.NumberOfSerializedLabels = copies;
+                    }
+                }
+
+                if (success)
+                {
+                    Cursor.Current = Cursors.WaitCursor;
+
+                    foreach (var substring in format.SubStrings)
+                    {
+                        int index = templateVariables.IndexOf(substring.Name);
+                        if (index >= 0 && index < templateVariables.Count)
+                        {
+                            switch (substring.Name)
+                            {
+                                case "date":
+                                    substring.Value = date;
+                                    break;
+                                case "MODEL":
+                                    substring.Value = MODEL;
+                                    break;
+                                case "seri":
+                                    substring.Value = seri;
+                                    break;
+                                case "SECCODE1":
+                                    substring.Value = SECCODE1;
+                                    break;
+                                case "SERI":
+                                    substring.Value = SERI;
+                                    break; 
+                                case "DATE":
+                                    substring.Value = DATE;
+                                    break;
+                                case "Model":
+                                    substring.Value = Model;
+                                    break;
+                                case "Q'ty":
+                                    substring.Value = qty.ToString();
+                                    break;
+
+                                default:
+                                    substring.Value = "";
+                                    break;
+
+                            }
+
+                        }
+                    }
+
+                    if (cboPrinters.SelectedItem != null)
+                        format.PrintSetup.PrinterName = cboPrinters.SelectedItem.ToString();
+
+                    Messages messages;
+                    int waitForCompletionTimeout = 10000; // 10 giây
+                    Result result = format.Print(ClassifyResult.Instance.ApplicationName, waitForCompletionTimeout, out messages);
+                    string messageString = "\n\nMessages:";
+
+                    if (result == Result.Failure)
+                        MessageBox.Show(this, "Print Failed" + messageString, ClassifyResult.Instance.ApplicationName);
+                    else
+                        MessageBox.Show(this, "Label was successfully sent to printer." , ClassifyResult.Instance.ApplicationName);
+                }
+            }
+        }
+
+        private void btnprint_Click(object sender, EventArgs e)
+        {
+            PrintLabel(Global.date,Global.MODEL, Global .seri, Global.SECCODE1, ClassifyResult.Instance.seri.ToString("000"), Global.model, Global.DATE, Global.Qty);
+        }
     }
 }

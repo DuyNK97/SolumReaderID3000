@@ -50,6 +50,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Lib\MvCodeReaderSDK.Net.dll</HintPath>
     </Reference>
+    <Reference Include="Seagull.BarTender.Print, Version=11.3.2.1, Culture=neutral, PublicKeyToken=109ff779a1b4cbc7, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\DNK\4.Sourcecode\1.Project\Solum\SolumPJ\SolumPJ\DLL\Seagull.BarTender.Print.dll</HintPath>
+    </Reference>
     <Reference Include="SunnyUI">
       <HintPath>..\..\..\..\..\..\ACF_IVF\ACF_IVF\DLL\SunnyUI.dll</HintPath>
     </Reference>
