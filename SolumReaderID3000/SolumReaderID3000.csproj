@@ -39,6 +39,13 @@
     <Reference Include="ComponentFactory.Krypton.Toolkit">
       <HintPath>Lib\ComponentFactory.Krypton.Toolkit.dll</HintPath>
     </Reference>
+    <Reference Include="LModbus">
+      <HintPath>Lib\LModbus.dll</HintPath>
+    </Reference>
+    <Reference Include="MSFactoryDLL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\DNK\4.Sourcecode\1.Project\Solum\20241225_SolumReaderID3000\20241225_SolumReaderID3000\MSFactoryDLL\MSFactoryDLL\bin\x64\Debug\MSFactoryDLL.dll</HintPath>
+    </Reference>
     <Reference Include="MvCodeReaderSDK.Net, Version=1.5.3.2, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Lib\MvCodeReaderSDK.Net.dll</HintPath>
@@ -60,10 +67,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ClassifyResult.cs" />
-    <Compile Include="Classes\ControlUDP.cs" />
+    <Compile Include="Classes\ControlTCP.cs" />
     <Compile Include="Classes\CreateClassInstance.cs" />
     <Compile Include="Classes\Global.cs" />
     <Compile Include="Classes\IOControl.cs" />
+    <Compile Include="Classes\PLCInterface.cs" />
     <Compile Include="Classes\ReaderControl.cs" />
     <Compile Include="Classes\SettingParams.cs" />
     <Compile Include="Classes\UDPControl.cs" />
@@ -128,12 +136,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\MSFactoryDLL\MSFactoryDLL\MSFactoryDLL.csproj">
-      <Project>{82a98683-25cd-4382-88ac-7365e2726450}</Project>
-      <Name>MSFactoryDLL</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <None Include="icons8-settings-25.png" />
@@ -141,6 +143,7 @@
     <Content Include="Images\cancel.png" />
     <Content Include="Images\changeModel.png" />
     <Content Include="Images\checked.png" />
+    <None Include="Images\icons8-windows-11-24.png" />
     <Content Include="Lib\MvCodeReaderSDK.Net.dll" />
     <Content Include="Lib\MvCodeReaderSDK.Net.XML" />
     <None Include="Logo.ico" />

@@ -64,6 +64,9 @@
             this.cbbModel = new System.Windows.Forms.ComboBox();
             this.btnLoadModel = new System.Windows.Forms.Button();
             this.title = new SconnectCamdeco.Title();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lblWeight = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogCSV)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlParams.SuspendLayout();
@@ -78,15 +81,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.numberLength)).BeginInit();
             this.grbSaveNewModel.SuspendLayout();
             this.pnlModel.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvLogCSV
             // 
             this.dgvLogCSV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLogCSV.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvLogCSV.Location = new System.Drawing.Point(3, 523);
+            this.dgvLogCSV.Location = new System.Drawing.Point(3, 583);
             this.dgvLogCSV.Name = "dgvLogCSV";
-            this.dgvLogCSV.Size = new System.Drawing.Size(752, 185);
+            this.dgvLogCSV.RowHeadersWidth = 51;
+            this.dgvLogCSV.Size = new System.Drawing.Size(752, 207);
             this.dgvLogCSV.TabIndex = 18;
             // 
             // tableLayoutPanel1
@@ -103,7 +108,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 73.2F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 26.8F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1108, 711);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1108, 793);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // imageBox1
@@ -114,7 +119,7 @@
             this.imageBox1.IsViewPlusMarker = false;
             this.imageBox1.Location = new System.Drawing.Point(3, 3);
             this.imageBox1.Name = "imageBox1";
-            this.imageBox1.Size = new System.Drawing.Size(752, 514);
+            this.imageBox1.Size = new System.Drawing.Size(752, 574);
             this.imageBox1.TabIndex = 1;
             // 
             // pnlParams
@@ -128,7 +133,7 @@
             this.pnlParams.Location = new System.Drawing.Point(761, 3);
             this.pnlParams.Name = "pnlParams";
             this.tableLayoutPanel1.SetRowSpan(this.pnlParams, 2);
-            this.pnlParams.Size = new System.Drawing.Size(344, 705);
+            this.pnlParams.Size = new System.Drawing.Size(344, 787);
             this.pnlParams.TabIndex = 2;
             // 
             // tblog
@@ -137,10 +142,10 @@
             this.tblog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tblog.Font = new System.Drawing.Font("Microsoft Tai Le", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tblog.ForeColor = System.Drawing.Color.Black;
-            this.tblog.Location = new System.Drawing.Point(0, 647);
+            this.tblog.Location = new System.Drawing.Point(0, 704);
             this.tblog.Name = "tblog";
             this.tblog.ReadOnly = true;
-            this.tblog.Size = new System.Drawing.Size(344, 58);
+            this.tblog.Size = new System.Drawing.Size(344, 83);
             this.tblog.TabIndex = 25;
             this.tblog.Text = "";
             // 
@@ -149,7 +154,7 @@
             this.groupBox1.Controls.Add(this.ucResult1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.ForeColor = System.Drawing.Color.White;
-            this.groupBox1.Location = new System.Drawing.Point(0, 428);
+            this.groupBox1.Location = new System.Drawing.Point(0, 485);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(344, 219);
             this.groupBox1.TabIndex = 24;
@@ -160,12 +165,14 @@
             // 
             this.ucResult1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ucResult1.Location = new System.Drawing.Point(3, 16);
+            this.ucResult1.Margin = new System.Windows.Forms.Padding(4);
             this.ucResult1.Name = "ucResult1";
             this.ucResult1.Size = new System.Drawing.Size(338, 200);
             this.ucResult1.TabIndex = 0;
             // 
             // grbReaderParams
             // 
+            this.grbReaderParams.Controls.Add(this.groupBox2);
             this.grbReaderParams.Controls.Add(this.groupreader);
             this.grbReaderParams.Controls.Add(this.Grouplot);
             this.grbReaderParams.Controls.Add(this.grbformat);
@@ -173,7 +180,7 @@
             this.grbReaderParams.ForeColor = System.Drawing.Color.White;
             this.grbReaderParams.Location = new System.Drawing.Point(0, 134);
             this.grbReaderParams.Name = "grbReaderParams";
-            this.grbReaderParams.Size = new System.Drawing.Size(344, 294);
+            this.grbReaderParams.Size = new System.Drawing.Size(344, 351);
             this.grbReaderParams.TabIndex = 6;
             this.grbReaderParams.TabStop = false;
             this.grbReaderParams.Text = "Model Config";
@@ -562,24 +569,61 @@
             this.title.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(55)))), ((int)(((byte)(59)))));
             this.title.Dock = System.Windows.Forms.DockStyle.Top;
             this.title.Location = new System.Drawing.Point(0, 0);
+            this.title.Margin = new System.Windows.Forms.Padding(4);
             this.title.Name = "title";
             this.title.Size = new System.Drawing.Size(1108, 50);
             this.title.TabIndex = 0;
             this.title.TitleLogo = global::SolumReaderID3000.Properties.Resources.solum;
             this.title.TitleName = "SOLUM QR READER";
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.lblWeight);
+            this.groupBox2.Controls.Add(this.label4);
+            this.groupBox2.ForeColor = System.Drawing.Color.White;
+            this.groupBox2.Location = new System.Drawing.Point(10, 293);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(325, 44);
+            this.groupBox2.TabIndex = 14;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Weight";
+            this.groupBox2.Visible = false;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label4.Location = new System.Drawing.Point(190, 13);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(35, 24);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Kg";
+            // 
+            // lblWeight
+            // 
+            this.lblWeight.AutoSize = true;
+            this.lblWeight.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWeight.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.lblWeight.Location = new System.Drawing.Point(124, 13);
+            this.lblWeight.Name = "lblWeight";
+            this.lblWeight.Size = new System.Drawing.Size(60, 24);
+            this.lblWeight.TabIndex = 4;
+            this.lblWeight.Text = "0.000";
+            // 
             // fMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(67)))), ((int)(((byte)(78)))));
-            this.ClientSize = new System.Drawing.Size(1108, 761);
+            this.ClientSize = new System.Drawing.Size(1108, 843);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.title);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "fMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogCSV)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.pnlParams.ResumeLayout(false);
@@ -598,13 +642,13 @@
             this.grbSaveNewModel.ResumeLayout(false);
             this.grbSaveNewModel.PerformLayout();
             this.pnlModel.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private SconnectCamdeco.Title title;
         private MSFactoryDLL.ImageBox imageBox1;
         private System.Windows.Forms.DataGridView dgvLogCSV;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
@@ -640,6 +684,10 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private UControls.ucResult ucResult1;
+        private SconnectCamdeco.Title title;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label lblWeight;
+        private System.Windows.Forms.Label label4;
     }
 }
 

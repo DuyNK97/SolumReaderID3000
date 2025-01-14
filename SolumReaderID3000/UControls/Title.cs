@@ -86,6 +86,18 @@ namespace SconnectCamdeco
             SerialPortSettingsChangedMain?.Invoke(ClassifyResult.Instance.SerialPort);
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (this.ParentForm.WindowState == FormWindowState.Maximized)
+            {
+                this.ParentForm.WindowState = FormWindowState.Normal;
+
+            }
+            else
+            {
+                this.ParentForm.WindowState = FormWindowState.Maximized;
+            }
+        }
     }
 
 

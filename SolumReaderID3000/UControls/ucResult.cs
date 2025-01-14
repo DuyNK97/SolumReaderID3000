@@ -31,8 +31,8 @@ namespace SolumReaderID3000.UControls
         {
             this.Invoke(new Action(() =>
             {
-                labelNumTrayTotal.Text = (ClassifyResult.Instance.TotalLot == 0 ? "0" : ClassifyResult.Instance.TotalLot.ToString("###,###"));
-                labelNumTrayTotal.Refresh();
+                //labelNumTrayTotal.Text = (ClassifyResult.Instance.TotalLot == 0 ? "0" : ClassifyResult.Instance.TotalLot.ToString("###,###"));
+                //labelNumTrayTotal.Refresh();
                 labelCountOK.Text = (ClassifyResult.Instance.OK == 0 ? "0" : ClassifyResult.Instance.OK.ToString("###,###"));
                 labelCountOK.Refresh();
                 labelCountNG.Text = (ClassifyResult.Instance.NG == 0 ? "0" : ClassifyResult.Instance.NG.ToString("###,###"));
@@ -44,6 +44,10 @@ namespace SolumReaderID3000.UControls
                 labelNGPercent.Text = (ClassifyResult.Instance.NGPercent == 0 ? "0.0%" : ClassifyResult.Instance.NGPercent.ToString("F1") + "%");
                 labelNGPercent.Refresh();
             }));
+            if (Global.modelList.Count == Global.Modelqty)
+            {
+                Global.modelList.Clear();
+            }
         }
 
         private void btnClear_Click(object sender, EventArgs e)
