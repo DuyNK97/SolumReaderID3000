@@ -1,125 +1,115 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SolumReaderID3000.Classes
 {
     public class ControlTCP
     {
-        private TcpClient tcpClient;
-        private NetworkStream stream;
+        private TcpListener server;
+        private bool isRunning;
         private readonly string serverIp;
         private readonly int serverPort;
         public event Action<string> LotDataReceived;
 
-        public bool IsConnected => tcpClient != null && tcpClient.Connected;
-
-        public ControlTCP(string serverIp = "107.105.30.100", int serverPort = 2024)
+        public ControlTCP(string serverIp = "127.0.0.1", int serverPort = 2024)
         {
             this.serverIp = serverIp;
             this.serverPort = serverPort;
+            StartServer(); 
         }
 
-        // Kết nối tới server
-        public void Connect()
+        public void StartServer()
         {
             try
             {
-                tcpClient = new TcpClient();
-                tcpClient.Connect(serverIp, serverPort);
-                stream = tcpClient.GetStream();
-                Console.WriteLine("Connected to server.");
-                StartReceiving();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error connecting to server: {ex.Message}");
-            }
-        }
+                server = new TcpListener(IPAddress.Parse(serverIp), serverPort);
+                server.Start();
+                isRunning = true;
+                Console.WriteLine("Server started...");
 
-        // Gửi dữ liệu tới server
-        public void Send(string message)
-        {
-            if (!IsConnected)
-            {
-                Console.WriteLine("Client is not connected to server.");
-                return;
-            }
-
-            try
-            {
-                byte[] data = Encoding.UTF8.GetBytes(message);
-                stream.Write(data, 0, data.Length);
-                Console.WriteLine("Data sent to server.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error sending data: {ex.Message}");
-            }
-        }
-
-        // Bắt đầu nhận dữ liệu
-        private void StartReceiving()
-        {
-            Thread receivingThread = new Thread(() =>
-            {
-                while (IsConnected)
+                while (isRunning)
                 {
-                    Receive();
+                    
+                    TcpClient connectedClient = server.AcceptTcpClient();
+                    Console.WriteLine("Client connected!");
+
+                    ProcessClient(connectedClient);
                 }
-            });
-            receivingThread.Start();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in server: " + ex.Message);
+            }
         }
 
-        // Nhận dữ liệu từ server
-        public void Receive()
+        private void ProcessClient(TcpClient client)
         {
-            if (!IsConnected)
+            using (client)
             {
-                Console.WriteLine("Client is not connected to server.");
-                return;
-            }
-
-            try
-            {
+                NetworkStream stream = client.GetStream();
                 byte[] buffer = new byte[1024];
-                int bytesRead = stream.Read(buffer, 0, buffer.Length);
-                if (bytesRead > 0)
-                {
-                    string receivedData = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    Console.WriteLine($"Data received from server: {receivedData}");
 
-                    //if (receivedData.Contains("Lot:"))
-                    //{
-                        LotDataReceived?.Invoke(receivedData); // Kích hoạt sự kiện nếu có dữ liệu "Lot:"
-                    //}
+                try
+                {
+                    while (client.Connected)
+                    {
+                        int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                        if (bytesRead > 0)
+                        {
+                            string receivedData = Encoding.UTF8.GetString(buffer, 0, bytesRead).TrimEnd('\0');
+                            ProcessReceivedData(receivedData);
+                        }
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error receiving data: {ex.Message}");
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error processing client: " + ex.Message);
+                }
+                finally
+                {
+                    Console.WriteLine("Client disconnected.");
+                }
             }
         }
 
-        // Đóng kết nối
-        public void Disconnect()
+        private void ProcessReceivedData(string data)
         {
-            try
+            if (data.Length > 1)
             {
-                stream?.Close();
-                tcpClient?.Close();
-                Console.WriteLine("Disconnected from server.");
+                Console.WriteLine("Received data: " + data);
+                LotDataReceived?.Invoke(data);
             }
-            catch (Exception ex)
+        }
+
+        public void StopServer()
+        {
+            isRunning = false;
+            server?.Stop();
+            Console.WriteLine("Server stopped.");
+        }
+
+        public void SendDataToClient(TcpClient client, string data)
+        {
+            if (client.Connected)
             {
-                Console.WriteLine($"Error disconnecting: {ex.Message}");
+                NetworkStream stream = client.GetStream();
+                byte[] buffer = Encoding.UTF8.GetBytes(data);
+                stream.Write(buffer, 0, buffer.Length);
+                Console.WriteLine("Data sent to client: " + data);
+            }
+        }
+        public void SendMessageToClient(string message)
+        {
+            if (server != null)
+            {
+                TcpClient client = server.GetConnectedClient(); // Đây là một hàm giả định bạn có để lấy client đã kết nối
+                if (client != null)
+                {
+                    server.SendDataToClient(client, message);
+                }
             }
         }
     }

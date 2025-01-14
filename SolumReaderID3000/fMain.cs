@@ -17,6 +17,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 using System.IO.Ports;
 using Seagull.BarTender.Print;
 using System.Collections;
+using System.Net.Sockets;
 
 namespace SolumReaderID3000
 {
@@ -25,7 +26,7 @@ namespace SolumReaderID3000
         UDPControl udpChat;
         ControlTCP _client = new ControlTCP();//tcpip
         PLCInterface _plcInterface = new PLCInterface();
-
+        ControlTCP server;
         //prnt label
         private LabelFormatDocument format = null;
         private const string appName = "Label Print";
@@ -125,16 +126,17 @@ namespace SolumReaderID3000
         }
         public void InitLogTCP()
         {
-            _client.Connect();
-            if (_client.IsConnected)
-            {
-                ShowLog("Connect to TCP/IP success \n ");
-            }
-            else
-            {
-                ShowLog("Connect to TCP/IP fail! \n ");
-            }
-            _client.LotDataReceived += OnLotDataReceived;
+             server = new ControlTCP();
+            //_client.Connect();
+            //if (_client.IsConnected)
+            //{
+            //    ShowLog("Connect to TCP/IP success \n ");
+            //}
+            //else
+            //{
+            //    ShowLog("Connect to TCP/IP fail! \n ");
+            //}
+            server.LotDataReceived += OnLotDataReceived;
         }
         private void OnLotDataReceived(string data)
         {
@@ -344,7 +346,7 @@ namespace SolumReaderID3000
                         {
                             HandleValidCode(imageBox1.Image.Clone() as Bitmap, DateTime.Now.ToString(), "NG");
                             //HandleValidCode(bmpSaveImageGraphics, DateTime.Now.ToString(), "NG");
-                            _client.Send(code); //ok gui len MES
+                            server.SendDataToClient(code); //ok gui len MES
 
                             //HandleValidCode(bmpSaveImageGraphics, code, "OK");
                             //SendData("OK");
@@ -367,6 +369,7 @@ namespace SolumReaderID3000
             else
                 action();
         }
+        
 
         private void HandleNoCodeDetected(Bitmap bmpSaveImageGraphics)
         {
