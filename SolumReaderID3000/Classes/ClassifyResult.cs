@@ -21,11 +21,11 @@ namespace SolumReaderID3000
         public int RPort { get => _RPort; set => _RPort = value; }
         public int Sport { get => _Sport; set => _Sport = value; }
 
-        public int seri { get; set; } = 1;
+        public int seri { get; set; } = 0;
 
         public string SerialPort { get; set; } = "COM4";
         public int baudrate { get; set; } = 115200;
-
+        public int DayDelete { get; set; } = 3;
 
         //public int TotalLot { get; set; }
 

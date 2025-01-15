@@ -148,6 +148,8 @@
     <Content Include="Images\changeModel.png" />
     <Content Include="Images\checked.png" />
     <None Include="Images\icons8-windows-11-24.png" />
+    <None Include="Images\icons8-open-folder-24.png" />
+    <None Include="Images\icons8-keyboard-80.png" />
     <Content Include="Lib\MvCodeReaderSDK.Net.dll" />
     <Content Include="Lib\MvCodeReaderSDK.Net.XML" />
     <None Include="Logo.ico" />

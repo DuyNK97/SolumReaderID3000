@@ -17,6 +17,8 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 using System.IO.Ports;
 using Seagull.BarTender.Print;
 using System.Collections;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace SolumReaderID3000
 {
@@ -114,8 +116,26 @@ namespace SolumReaderID3000
 
         private void ReadDataFromPLC()
         {
-            //whixx
-            // _plcInterface.ReadDataPLC();
+            while (!this.IsDisposed)
+            {
+                if (_plcInterface.ReadBitPLC())
+                {
+                    Console.WriteLine("Printer");
+                    this.Invoke(new Action(() =>
+                    {
+                        lblWeight.Text = _plcInterface.ReadRegisterPLC();
+                        PrintLabel(Global.date, Global.MODEL, Global.seri, Global.SECCODE1, ClassifyResult.Instance.seri.ToString("000"), Global.model, Global.DATE, Global.Qty);
+                        Thread.Sleep(5000);
+                        ClassifyResult.Instance.seri = 0;
+                        while (_plcInterface.ReadBitPLC())
+                        {
+                            _plcInterface.WriteBitPLC();
+                        }
+                        ShowLog("ReadBit");
+                    }));
+                }
+                Thread.Sleep(2000);
+            }
         }
 
         public void InitUDPControl()
@@ -169,7 +189,7 @@ namespace SolumReaderID3000
             {
                 Action action = () =>
                 {
-                    ClassCommon.FolderAutoCreate = new FolderAutoCreate(Application.StartupPath, 30);
+                    ClassCommon.FolderAutoCreate = new FolderAutoCreate(Application.StartupPath, ClassifyResult.Instance.DayDelete);
 
                     dgvLogCSV.DataSource = null;
                     strHeaders = "TIME,NO,MODEL,";
@@ -342,12 +362,12 @@ namespace SolumReaderID3000
                         }
                         else
                         {
-                            HandleValidCode(imageBox1.Image.Clone() as Bitmap, DateTime.Now.ToString(), "NG");
+                            //HandleValidCode(imageBox1.Image.Clone() as Bitmap, DateTime.Now.ToString(), "NG");
                             //HandleValidCode(bmpSaveImageGraphics, DateTime.Now.ToString(), "NG");
                             _client.Send(code); //ok gui len MES
-
-                            //HandleValidCode(bmpSaveImageGraphics, code, "OK");
-                            //SendData("OK");
+                            ClassifyResult.Instance.seri++;
+                            HandleValidCode(bmpSaveImageGraphics, code, "OK");
+                            SendData("OK");
                             //
                             //ProcessValidCode(bmpSaveImageGraphics, code);
                         }
@@ -372,13 +392,26 @@ namespace SolumReaderID3000
         {
             ClassifyResult.Instance.RunResult = ClassifyResult.eFinalResult.NG;
             logCSV.SaveLog($"{ClassifyResult.Instance.Total},{currentModel},NA,NA,{ClassifyResult.Instance.RunResult}");
-            //new Thread(() => SaveImageGraphics("Empty", bmpSaveImageGraphics, @"NG\"));
+            SaveImageGraphics("Empty", bmpSaveImageGraphics, @"NG\");
+        }
+        private void HandleInvalidCode(Bitmap bmpSaveImageGraphics, string code, string folder)
+        {
+            ClassifyResult.Instance.RunResult = ClassifyResult.eFinalResult.NG;
+            SaveImageGraphics(code, bmpSaveImageGraphics, $@"NG\{folder}\");
+        }
+        private void HandleValidCode(Bitmap bmpSaveImageGraphics, string code, string folder)
+        {
+            ClassifyResult.Instance.RunResult = ClassifyResult.eFinalResult.OK;
+            SaveImageGraphics(code, bmpSaveImageGraphics, folder + "\\");
+
         }
         private void AddCodeGraphic(string code)
         {
             var msString = new MsString(code, new System.Drawing.PointF(10, 10), new Font("Arial", 15.0f), new SolidBrush(Color.Green));
             imageBox1.AddGraphics(msString);
         }
+
+        #region Code not use
         private void ProcessValidCode(Bitmap bmpSaveImageGraphics, string code)
         {
             if (Global.length > 0)
@@ -439,19 +472,6 @@ namespace SolumReaderID3000
                 }
             }
         }
-        private void HandleInvalidCode(Bitmap bmpSaveImageGraphics, string code, string folder)
-        {
-            ClassifyResult.Instance.RunResult = ClassifyResult.eFinalResult.NG;
-            /* new Thread(() => */
-            // SaveImageGraphics(code, bmpSaveImageGraphics, $@"NG\{folder}\")/*)*/;
-        }
-        private void HandleValidCode(Bitmap bmpSaveImageGraphics, string code, string folder)
-        {
-            //ClassifyResult.Instance.RunResult = ClassifyResult.eFinalResult.OK;
-            //new Thread(() =>
-            SaveImageGraphics(code, bmpSaveImageGraphics, folder + "\\")/*)*/;
-
-        }
         private void HandleValidLengthCode(Bitmap bmpSaveImageGraphics, string code)
         {
             if (Global.format == "%%" || CheckFormat(code))
@@ -479,19 +499,31 @@ namespace SolumReaderID3000
             //}
             //bmpSave.Save(Path.Combine(fullpath, nameFile), ImageFormat.Png);
         }
+        #endregion
+
 
         private void SaveImageGraphics(string Item, Bitmap bmpSave, string subFolder)
         {
             new Thread(() =>
             {
-                string nameFile = string.Format("{0}_{1}.{2}", Item, DateTime.Now.ToString("HHmmss_fff"), "png");
-                string fullpath = Path.Combine(ClassCommon.FolderAutoCreate.GetFullPathByChildFolders("ScreenCapture"), subFolder);
-                if (!Directory.Exists(fullpath))
+                try
                 {
-                    Directory.CreateDirectory(fullpath);
+                    if (ClassifyResult.Instance.SaveRunImage)
+                    {
+                        string nameFile = string.Format("{0}_{1}.{2}", Item, DateTime.Now.ToString("HHmmss_fff"), "png");
+                        string fullpath = Path.Combine(ClassCommon.FolderAutoCreate.GetFullPathByChildFolders("ScreenCapture"), subFolder);
+                        if (!Directory.Exists(fullpath))
+                        {
+                            Directory.CreateDirectory(fullpath);
+                        }
+                        bmpSave.Save(Path.Combine(fullpath, nameFile), ImageFormat.Png);
+                    }
                 }
-                bmpSave.Save(Path.Combine(fullpath, nameFile), ImageFormat.Jpeg);
-            });
+                catch (Exception)
+                {
+                }
+
+            }).Start();
 
         }
 
@@ -514,7 +546,6 @@ namespace SolumReaderID3000
         {
             grbSaveNewModel.Visible = !isViewDefault;
             grbReaderParams.Visible = isViewDefault;
-            Grouplot.Visible = isViewDefault;
             pnlModel.Visible = isViewDefault;
             txtNewModelName.Clear();
             grbformat.Visible = isViewDefault;
@@ -568,7 +599,6 @@ namespace SolumReaderID3000
         {
             numExposure.Value = (decimal)setting.Exposure;
             numGain.Value = (decimal)setting.Gain;
-            numqty.Value = (int)setting.ModelQty;
 
             Global.readerControl.Exposure = setting.Exposure;
             Global.readerControl.Gain = setting.Gain;
@@ -656,7 +686,6 @@ namespace SolumReaderID3000
                 SettingParams.Instance.Parameters[IndexModel].Gain = (float)numGain.Value;
                 SettingParams.Instance.Parameters[IndexModel].Length = (int)numberLength.Value;
                 SettingParams.Instance.Parameters[IndexModel].Format = tbformat.Text;
-                SettingParams.Instance.Parameters[IndexModel].ModelQty = (int)numqty.Value;
                 LoadModel(SettingParams.Instance.Parameters[IndexModel]);
                 //InitModel();
                 MessageBox.Show($"Save setting successfully.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -881,14 +910,14 @@ namespace SolumReaderID3000
                         {
                             templateVariables.Add(substring.Name);
                         }
-
+                        Console.WriteLine(templateVariables.ToString());
                     }
                 }
             }
 
         }
 
-        private void PrintLabel( string date,string MODEL,string seri,string SECCODE1,string SERI,string Model, string DATE,int qty)
+        private void PrintLabel(string date, string MODEL, string seri, string SECCODE1, string SERI, string Model, string DATE, int qty)
         {
             lock (engine)
             {
@@ -900,7 +929,7 @@ namespace SolumReaderID3000
                     int copies = 1;
                     success = Int32.TryParse(txtIdenticalCopies.Text, out copies) && (copies >= 1);
                     if (!success)
-                        MessageBox.Show(this, "Identical Copies must be an integer greater than or equal to 1.", appName);
+                        ShowLog("Identical Copies must be an integer greater than or equal to 1: " + appName);
                     else
                         format.PrintSetup.IdenticalCopiesOfLabel = copies;
                 }
@@ -911,7 +940,7 @@ namespace SolumReaderID3000
                     success = Int32.TryParse(txtSerializedCopies.Text, out copies) && (copies >= 1);
                     if (!success)
                     {
-                        MessageBox.Show(this, "Serialized Copies must be an integer greater than or equal to 1.", appName);
+                        ShowLog( "Serialized Copies must be an integer greater than or equal to 1: "+ appName);
                     }
                     else
                     {
@@ -944,7 +973,7 @@ namespace SolumReaderID3000
                                     break;
                                 case "SERI":
                                     substring.Value = SERI;
-                                    break; 
+                                    break;
                                 case "DATE":
                                     substring.Value = DATE;
                                     break;
@@ -973,16 +1002,39 @@ namespace SolumReaderID3000
                     string messageString = "\n\nMessages:";
 
                     if (result == Result.Failure)
-                        MessageBox.Show(this, "Print Failed" + messageString, ClassifyResult.Instance.ApplicationName);
+                        ShowLog("Print Failed" + messageString);
                     else
-                        MessageBox.Show(this, "Label was successfully sent to printer." , ClassifyResult.Instance.ApplicationName);
+                        ShowLog("Label was successfully sent to printer.");
                 }
             }
         }
 
         private void btnprint_Click(object sender, EventArgs e)
         {
-            PrintLabel(Global.date,Global.MODEL, Global .seri, Global.SECCODE1, ClassifyResult.Instance.seri.ToString("000"), Global.model, Global.DATE, Global.Qty);
+            PrintLabel(Global.date, Global.MODEL, Global.seri, Global.SECCODE1, ClassifyResult.Instance.seri.ToString("000"), Global.model, Global.DATE, Global.Qty);
+        }
+
+        private void btnGraphicImage_Click(object sender, EventArgs e)
+        {
+            string path = ClassCommon.FolderAutoCreate.GetFullPathByChildFolders("ScreenCapture");
+            Process.Start(path);
+        }
+
+        private void btnRunImage_Click(object sender, EventArgs e)
+        {
+            string path = ClassCommon.FolderAutoCreate.GetFullPathByChildFolders("RunImage");
+            Process.Start(path);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            var path64 = Path.Combine(Directory.GetDirectories(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "winsxs"), "amd64_microsoft-windows-osk_*")[0], "osk.exe");
+            var path32 = @"C:\windows\system32\osk.exe";
+            var path = (Environment.Is64BitOperatingSystem) ? path64 : path32;
+            if (File.Exists(path))
+            {
+                Process.Start(path);
+            }
         }
     }
 }

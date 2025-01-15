@@ -83,6 +83,26 @@ namespace SolumReaderID3000.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icons8_keyboard_80 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-keyboard-80", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icons8_open_folder_24 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-open-folder-24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icons8_settings_25 {
             get {
                 object obj = ResourceManager.GetObject("icons8-settings-25", resourceCulture);

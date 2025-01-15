@@ -29,7 +29,7 @@ namespace SolumReaderID3000
             numberRport.Value= ClassifyResult.Instance.RPort;
             numberSport.Value= ClassifyResult.Instance.Sport;
             numbaud.Value= ClassifyResult.Instance.baudrate;
-
+            nudDayDelete.Value= ClassifyResult.Instance.DayDelete;
             cbCOMPorts.Items.AddRange(SerialPort.GetPortNames());
             if (cbCOMPorts.Items.Count > 0)
             {
@@ -41,57 +41,70 @@ namespace SolumReaderID3000
 
         private void btnDone_Click(object sender, EventArgs e)
         {
-            bool changecom=false;
-            ClassifyResult.Instance.SaveRunImage = ckbSaveRunImage.Checked;
-            string serverIP = tbserver.Text;
-            if (IsValidIPAddress(serverIP))
+            try
             {
+                //bool changecom=false;
+                ClassifyResult.Instance.SaveRunImage = ckbSaveRunImage.Checked;
+                //string serverIP = tbserver.Text;
+                //if (IsValidIPAddress(serverIP))
+                //{
                 ClassifyResult.Instance.ServerIP = tbserver.Text;
-                Console.WriteLine("Địa chỉ IP hợp lệ.");
-            }
-            else
-            {
-                Console.WriteLine("Địa chỉ IP không hợp lệ.");
-                MessageBox.Show("Invalid IP address.", "Check IP format", MessageBoxButtons.OK);
-                return;
+                //    Console.WriteLine("Địa chỉ IP hợp lệ.");
+                //}
+                //else
+                //{
+                //    Console.WriteLine("Địa chỉ IP không hợp lệ.");
+                //    MessageBox.Show("Invalid IP address.", "Check IP format", MessageBoxButtons.OK);
+                //    return;
 
-            }            
-            ClassifyResult.Instance.ApplicationName = tbNameApp.Text;
-            if (ClassifyResult.Instance.RPort != (int)numberRport.Value)
-            {
-                ClassifyResult.Instance.RPort = (int)numberRport.Value;
-            }
-            if (ClassifyResult.Instance.Sport != (int)numberSport.Value)
-            {
-                ClassifyResult.Instance.Sport = (int)numberSport.Value;
-            } 
-            if (ClassifyResult.Instance.baudrate != (int)numbaud.Value)
-            {
-                ClassifyResult.Instance.baudrate = (int)numbaud.Value;
-                changecom = true;
-            }
-            if (!string.IsNullOrWhiteSpace(cbCOMPorts.Text))
-            {
+                //}            
+                ClassifyResult.Instance.ApplicationName = tbNameApp.Text;
+                if (ClassifyResult.Instance.RPort != (int)numberRport.Value)
+                {
+                    ClassifyResult.Instance.RPort = (int)numberRport.Value;
+                }
+                if (ClassifyResult.Instance.Sport != (int)numberSport.Value)
+                {
+                    ClassifyResult.Instance.Sport = (int)numberSport.Value;
+                }
+
+                if (ClassifyResult.Instance.baudrate != (int)numbaud.Value)
+                {
+                    ClassifyResult.Instance.baudrate = (int)numbaud.Value;
+                    //changecom = true;
+                }
+                //if (!string.IsNullOrWhiteSpace(cbCOMPorts.Text))
+                //{
                 ClassifyResult.Instance.SerialPort = cbCOMPorts.Text;
-                changecom= true;
+                //    changecom= true;
+                //}
+                //if (changecom)
+                //{
+                //    SerialPortSettingsChanged?.Invoke(ClassifyResult.Instance.SerialPort);
+                //}
+                if (ClassifyResult.Instance.DayDelete != (int)nudDayDelete.Value)
+                {
+                    ClassifyResult.Instance.DayDelete = (int)nudDayDelete.Value;
+                }
+                Global.date = tbdate.Text;
+                Global.MODEL = tbMODEL.Text;
+                Global.seri = tbseri.Text;
+                Global.SECCODE1 = tbseccode1.Text;
+                Global.SERI = txtSERI.Text;
+                Global.DATE = txtDATE.Text;
+                Global.Qty = (int)numqty.Value;
+
+                ClassifyResult.Instance.Save();
+
+                MessageBox.Show("Save success!");
+                //this.Close();
+                //this.Dispose();
+
             }
-            ClassifyResult.Instance.Save();
-            if (changecom)
+            catch (Exception ex)
             {
-                SerialPortSettingsChanged?.Invoke(ClassifyResult.Instance.SerialPort);
-            }   
-            
-            Global.date= tbdate.Text;
-            Global.MODEL=tbMODEL.Text;
-            Global.seri=tbseri.Text;
-            Global.SECCODE1=tbseccode1.Text;
-            Global.SERI=txtSERI.Text;          
-            Global.DATE=txtDATE.Text;
-            Global.Qty =(int) numqty.Value;
-
-
-
-
+                MessageBox.Show("Save fail: "+ex.Message);
+            }
         }
         public static bool IsValidIPAddress(string ipAddress)
         {

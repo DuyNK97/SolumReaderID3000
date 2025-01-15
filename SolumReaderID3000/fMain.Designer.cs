@@ -33,7 +33,22 @@
             this.pnlParams = new System.Windows.Forms.Panel();
             this.tblog = new System.Windows.Forms.RichTextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ucResult1 = new SolumReaderID3000.UControls.ucResult();
             this.grbReaderParams = new System.Windows.Forms.GroupBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.btnRunImage = new System.Windows.Forms.Button();
+            this.btnGraphicImage = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnprint = new System.Windows.Forms.Button();
+            this.btnOpen = new System.Windows.Forms.Button();
+            this.txtFolderPath = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txtIdenticalCopies = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.txtSerializedCopies = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.cboPrinters = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.lblWeight = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -47,9 +62,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.Grouplot = new System.Windows.Forms.GroupBox();
-            this.numqty = new System.Windows.Forms.NumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
             this.grbformat = new System.Windows.Forms.GroupBox();
             this.button1 = new System.Windows.Forms.Button();
             this.tbformat = new System.Windows.Forms.TextBox();
@@ -66,46 +78,32 @@
             this.btnLoadModel = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.imageBox1 = new MSFactoryDLL.ImageBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.btnOpen = new System.Windows.Forms.Button();
-            this.txtFolderPath = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.txtIdenticalCopies = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.txtSerializedCopies = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.cboPrinters = new System.Windows.Forms.ComboBox();
-            this.btnprint = new System.Windows.Forms.Button();
-            this.ucResult1 = new SolumReaderID3000.UControls.ucResult();
             this.title = new SconnectCamdeco.Title();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogCSV)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlParams.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.grbReaderParams.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupreader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numExposure)).BeginInit();
-            this.Grouplot.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numqty)).BeginInit();
             this.grbformat.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numberLength)).BeginInit();
             this.grbSaveNewModel.SuspendLayout();
             this.pnlModel.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvLogCSV
             // 
             this.dgvLogCSV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLogCSV.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvLogCSV.Location = new System.Drawing.Point(3, 583);
+            this.dgvLogCSV.Location = new System.Drawing.Point(3, 718);
             this.dgvLogCSV.Name = "dgvLogCSV";
             this.dgvLogCSV.RowHeadersWidth = 51;
-            this.dgvLogCSV.Size = new System.Drawing.Size(752, 207);
+            this.dgvLogCSV.Size = new System.Drawing.Size(752, 256);
             this.dgvLogCSV.TabIndex = 18;
             // 
             // tableLayoutPanel1
@@ -122,7 +120,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 73.2F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 26.8F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1108, 793);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1108, 977);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // pnlParams
@@ -136,7 +134,7 @@
             this.pnlParams.Location = new System.Drawing.Point(761, 3);
             this.pnlParams.Name = "pnlParams";
             this.tableLayoutPanel1.SetRowSpan(this.pnlParams, 2);
-            this.pnlParams.Size = new System.Drawing.Size(344, 787);
+            this.pnlParams.Size = new System.Drawing.Size(344, 971);
             this.pnlParams.TabIndex = 2;
             // 
             // tblog
@@ -145,10 +143,10 @@
             this.tblog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tblog.Font = new System.Drawing.Font("Microsoft Tai Le", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tblog.ForeColor = System.Drawing.Color.Black;
-            this.tblog.Location = new System.Drawing.Point(0, 704);
+            this.tblog.Location = new System.Drawing.Point(0, 828);
             this.tblog.Name = "tblog";
             this.tblog.ReadOnly = true;
-            this.tblog.Size = new System.Drawing.Size(344, 83);
+            this.tblog.Size = new System.Drawing.Size(344, 143);
             this.tblog.TabIndex = 25;
             this.tblog.Text = "";
             // 
@@ -157,41 +155,205 @@
             this.groupBox1.Controls.Add(this.ucResult1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.ForeColor = System.Drawing.Color.White;
-            this.groupBox1.Location = new System.Drawing.Point(0, 485);
+            this.groupBox1.Location = new System.Drawing.Point(0, 609);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(344, 219);
             this.groupBox1.TabIndex = 24;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Statistical";
             // 
+            // ucResult1
+            // 
+            this.ucResult1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ucResult1.Location = new System.Drawing.Point(3, 16);
+            this.ucResult1.Margin = new System.Windows.Forms.Padding(4);
+            this.ucResult1.Name = "ucResult1";
+            this.ucResult1.Size = new System.Drawing.Size(338, 200);
+            this.ucResult1.TabIndex = 0;
+            // 
             // grbReaderParams
             // 
+            this.grbReaderParams.Controls.Add(this.button4);
+            this.grbReaderParams.Controls.Add(this.btnRunImage);
+            this.grbReaderParams.Controls.Add(this.btnGraphicImage);
+            this.grbReaderParams.Controls.Add(this.groupBox3);
             this.grbReaderParams.Controls.Add(this.groupBox2);
             this.grbReaderParams.Controls.Add(this.groupreader);
-            this.grbReaderParams.Controls.Add(this.Grouplot);
             this.grbReaderParams.Controls.Add(this.grbformat);
             this.grbReaderParams.Dock = System.Windows.Forms.DockStyle.Top;
             this.grbReaderParams.ForeColor = System.Drawing.Color.White;
             this.grbReaderParams.Location = new System.Drawing.Point(0, 134);
             this.grbReaderParams.Name = "grbReaderParams";
-            this.grbReaderParams.Size = new System.Drawing.Size(344, 351);
+            this.grbReaderParams.Size = new System.Drawing.Size(344, 475);
             this.grbReaderParams.TabIndex = 6;
             this.grbReaderParams.TabStop = false;
             this.grbReaderParams.Text = "Model Config";
             this.grbReaderParams.Visible = false;
+            // 
+            // button4
+            // 
+            this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(67)))), ((int)(((byte)(78)))));
+            this.button4.BackgroundImage = global::SolumReaderID3000.Properties.Resources.icons8_keyboard_80;
+            this.button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button4.Location = new System.Drawing.Point(245, 425);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(68, 35);
+            this.button4.TabIndex = 15;
+            this.button4.UseVisualStyleBackColor = false;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // btnRunImage
+            // 
+            this.btnRunImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(67)))), ((int)(((byte)(78)))));
+            this.btnRunImage.BackgroundImage = global::SolumReaderID3000.Properties.Resources.icons8_open_folder_24;
+            this.btnRunImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnRunImage.Location = new System.Drawing.Point(139, 425);
+            this.btnRunImage.Name = "btnRunImage";
+            this.btnRunImage.Size = new System.Drawing.Size(68, 35);
+            this.btnRunImage.TabIndex = 15;
+            this.btnRunImage.UseVisualStyleBackColor = false;
+            this.btnRunImage.Visible = false;
+            this.btnRunImage.Click += new System.EventHandler(this.btnRunImage_Click);
+            // 
+            // btnGraphicImage
+            // 
+            this.btnGraphicImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(67)))), ((int)(((byte)(78)))));
+            this.btnGraphicImage.BackgroundImage = global::SolumReaderID3000.Properties.Resources.icons8_open_folder_24;
+            this.btnGraphicImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnGraphicImage.Location = new System.Drawing.Point(33, 425);
+            this.btnGraphicImage.Name = "btnGraphicImage";
+            this.btnGraphicImage.Size = new System.Drawing.Size(68, 35);
+            this.btnGraphicImage.TabIndex = 15;
+            this.btnGraphicImage.UseVisualStyleBackColor = false;
+            this.btnGraphicImage.Click += new System.EventHandler(this.btnGraphicImage_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.btnprint);
+            this.groupBox3.Controls.Add(this.btnOpen);
+            this.groupBox3.Controls.Add(this.txtFolderPath);
+            this.groupBox3.Controls.Add(this.label9);
+            this.groupBox3.Controls.Add(this.txtIdenticalCopies);
+            this.groupBox3.Controls.Add(this.label10);
+            this.groupBox3.Controls.Add(this.txtSerializedCopies);
+            this.groupBox3.Controls.Add(this.label11);
+            this.groupBox3.Controls.Add(this.label12);
+            this.groupBox3.Controls.Add(this.cboPrinters);
+            this.groupBox3.ForeColor = System.Drawing.Color.White;
+            this.groupBox3.Location = new System.Drawing.Point(10, 296);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(325, 123);
+            this.groupBox3.TabIndex = 8;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Printing";
+            // 
+            // btnprint
+            // 
+            this.btnprint.ForeColor = System.Drawing.Color.Black;
+            this.btnprint.Location = new System.Drawing.Point(242, 69);
+            this.btnprint.Name = "btnprint";
+            this.btnprint.Size = new System.Drawing.Size(75, 46);
+            this.btnprint.TabIndex = 14;
+            this.btnprint.Text = "Print";
+            this.btnprint.UseVisualStyleBackColor = true;
+            this.btnprint.Click += new System.EventHandler(this.btnprint_Click);
+            // 
+            // btnOpen
+            // 
+            this.btnOpen.ForeColor = System.Drawing.Color.Black;
+            this.btnOpen.Location = new System.Drawing.Point(242, 14);
+            this.btnOpen.Name = "btnOpen";
+            this.btnOpen.Size = new System.Drawing.Size(75, 23);
+            this.btnOpen.TabIndex = 9;
+            this.btnOpen.Text = "Open File";
+            this.btnOpen.UseVisualStyleBackColor = true;
+            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
+            // 
+            // txtFolderPath
+            // 
+            this.txtFolderPath.Location = new System.Drawing.Point(75, 16);
+            this.txtFolderPath.Name = "txtFolderPath";
+            this.txtFolderPath.ReadOnly = true;
+            this.txtFolderPath.Size = new System.Drawing.Size(161, 20);
+            this.txtFolderPath.TabIndex = 13;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.ForeColor = System.Drawing.Color.White;
+            this.label9.Location = new System.Drawing.Point(8, 22);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(68, 13);
+            this.label9.TabIndex = 12;
+            this.label9.Text = "&Label Folder:";
+            // 
+            // txtIdenticalCopies
+            // 
+            this.txtIdenticalCopies.Location = new System.Drawing.Point(99, 69);
+            this.txtIdenticalCopies.Name = "txtIdenticalCopies";
+            this.txtIdenticalCopies.Size = new System.Drawing.Size(112, 20);
+            this.txtIdenticalCopies.TabIndex = 3;
+            this.txtIdenticalCopies.Text = "1";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.ForeColor = System.Drawing.Color.White;
+            this.label10.Location = new System.Drawing.Point(7, 98);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(90, 13);
+            this.label10.TabIndex = 4;
+            this.label10.Text = "&Serialized Copies:";
+            // 
+            // txtSerializedCopies
+            // 
+            this.txtSerializedCopies.Location = new System.Drawing.Point(99, 95);
+            this.txtSerializedCopies.Name = "txtSerializedCopies";
+            this.txtSerializedCopies.Size = new System.Drawing.Size(112, 20);
+            this.txtSerializedCopies.TabIndex = 5;
+            this.txtSerializedCopies.Text = "1";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(7, 72);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(85, 13);
+            this.label11.TabIndex = 2;
+            this.label11.Text = "&Identical Copies:";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.ForeColor = System.Drawing.Color.White;
+            this.label12.Location = new System.Drawing.Point(7, 45);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(40, 13);
+            this.label12.TabIndex = 0;
+            this.label12.Text = "P&rinter:";
+            // 
+            // cboPrinters
+            // 
+            this.cboPrinters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboPrinters.FormattingEnabled = true;
+            this.cboPrinters.Location = new System.Drawing.Point(53, 42);
+            this.cboPrinters.Name = "cboPrinters";
+            this.cboPrinters.Size = new System.Drawing.Size(183, 21);
+            this.cboPrinters.Sorted = true;
+            this.cboPrinters.TabIndex = 1;
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.lblWeight);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.ForeColor = System.Drawing.Color.White;
-            this.groupBox2.Location = new System.Drawing.Point(10, 293);
+            this.groupBox2.Location = new System.Drawing.Point(10, 246);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(325, 44);
             this.groupBox2.TabIndex = 14;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Weight";
-            this.groupBox2.Visible = false;
             // 
             // lblWeight
             // 
@@ -368,54 +530,6 @@
             this.label1.Size = new System.Drawing.Size(71, 17);
             this.label1.TabIndex = 9;
             this.label1.Text = "Exposure:";
-            // 
-            // Grouplot
-            // 
-            this.Grouplot.Controls.Add(this.numqty);
-            this.Grouplot.Controls.Add(this.label6);
-            this.Grouplot.ForeColor = System.Drawing.Color.White;
-            this.Grouplot.Location = new System.Drawing.Point(10, 243);
-            this.Grouplot.Name = "Grouplot";
-            this.Grouplot.Size = new System.Drawing.Size(325, 44);
-            this.Grouplot.TabIndex = 12;
-            this.Grouplot.TabStop = false;
-            this.Grouplot.Text = "Lot ";
-            this.Grouplot.Visible = false;
-            // 
-            // numqty
-            // 
-            this.numqty.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.numqty.Location = new System.Drawing.Point(92, 15);
-            this.numqty.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.numqty.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numqty.Name = "numqty";
-            this.numqty.Size = new System.Drawing.Size(120, 23);
-            this.numqty.TabIndex = 8;
-            this.numqty.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.numqty.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.label6.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label6.Location = new System.Drawing.Point(20, 15);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(37, 17);
-            this.label6.TabIndex = 3;
-            this.label6.Text = "Q\'ty:";
             // 
             // grbformat
             // 
@@ -595,17 +709,16 @@
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnCount = 1;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.28723F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.71276F));
-            this.tableLayoutPanel2.Controls.Add(this.groupBox3, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.imageBox1, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(752, 574);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(752, 709);
             this.tableLayoutPanel2.TabIndex = 19;
             // 
             // imageBox1
@@ -616,134 +729,8 @@
             this.imageBox1.IsViewPlusMarker = false;
             this.imageBox1.Location = new System.Drawing.Point(3, 3);
             this.imageBox1.Name = "imageBox1";
-            this.imageBox1.Size = new System.Drawing.Size(500, 568);
+            this.imageBox1.Size = new System.Drawing.Size(746, 703);
             this.imageBox1.TabIndex = 2;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.btnprint);
-            this.groupBox3.Controls.Add(this.btnOpen);
-            this.groupBox3.Controls.Add(this.txtFolderPath);
-            this.groupBox3.Controls.Add(this.label9);
-            this.groupBox3.Controls.Add(this.txtIdenticalCopies);
-            this.groupBox3.Controls.Add(this.label10);
-            this.groupBox3.Controls.Add(this.txtSerializedCopies);
-            this.groupBox3.Controls.Add(this.label11);
-            this.groupBox3.Controls.Add(this.label12);
-            this.groupBox3.Controls.Add(this.cboPrinters);
-            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox3.ForeColor = System.Drawing.Color.White;
-            this.groupBox3.Location = new System.Drawing.Point(509, 3);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(240, 568);
-            this.groupBox3.TabIndex = 8;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Printing";
-            // 
-            // btnOpen
-            // 
-            this.btnOpen.ForeColor = System.Drawing.Color.Black;
-            this.btnOpen.Location = new System.Drawing.Point(9, 42);
-            this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(75, 23);
-            this.btnOpen.TabIndex = 9;
-            this.btnOpen.Text = "Open File";
-            this.btnOpen.UseVisualStyleBackColor = true;
-            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
-            // 
-            // txtFolderPath
-            // 
-            this.txtFolderPath.Location = new System.Drawing.Point(75, 16);
-            this.txtFolderPath.Name = "txtFolderPath";
-            this.txtFolderPath.ReadOnly = true;
-            this.txtFolderPath.Size = new System.Drawing.Size(161, 20);
-            this.txtFolderPath.TabIndex = 13;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(8, 22);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(68, 13);
-            this.label9.TabIndex = 12;
-            this.label9.Text = "&Label Folder:";
-            // 
-            // txtIdenticalCopies
-            // 
-            this.txtIdenticalCopies.Location = new System.Drawing.Point(98, 97);
-            this.txtIdenticalCopies.Name = "txtIdenticalCopies";
-            this.txtIdenticalCopies.Size = new System.Drawing.Size(112, 20);
-            this.txtIdenticalCopies.TabIndex = 3;
-            this.txtIdenticalCopies.Text = "1";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(6, 126);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(90, 13);
-            this.label10.TabIndex = 4;
-            this.label10.Text = "&Serialized Copies:";
-            // 
-            // txtSerializedCopies
-            // 
-            this.txtSerializedCopies.Location = new System.Drawing.Point(98, 123);
-            this.txtSerializedCopies.Name = "txtSerializedCopies";
-            this.txtSerializedCopies.Size = new System.Drawing.Size(112, 20);
-            this.txtSerializedCopies.TabIndex = 5;
-            this.txtSerializedCopies.Text = "1";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(6, 100);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(85, 13);
-            this.label11.TabIndex = 2;
-            this.label11.Text = "&Identical Copies:";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(6, 73);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(40, 13);
-            this.label12.TabIndex = 0;
-            this.label12.Text = "P&rinter:";
-            // 
-            // cboPrinters
-            // 
-            this.cboPrinters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboPrinters.FormattingEnabled = true;
-            this.cboPrinters.Location = new System.Drawing.Point(52, 70);
-            this.cboPrinters.Name = "cboPrinters";
-            this.cboPrinters.Size = new System.Drawing.Size(183, 21);
-            this.cboPrinters.Sorted = true;
-            this.cboPrinters.TabIndex = 1;
-            // 
-            // btnprint
-            // 
-            this.btnprint.ForeColor = System.Drawing.Color.Black;
-            this.btnprint.Location = new System.Drawing.Point(9, 158);
-            this.btnprint.Name = "btnprint";
-            this.btnprint.Size = new System.Drawing.Size(75, 23);
-            this.btnprint.TabIndex = 14;
-            this.btnprint.Text = "print";
-            this.btnprint.UseVisualStyleBackColor = true;
-            this.btnprint.Click += new System.EventHandler(this.btnprint_Click);
-            // 
-            // ucResult1
-            // 
-            this.ucResult1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ucResult1.Location = new System.Drawing.Point(3, 16);
-            this.ucResult1.Margin = new System.Windows.Forms.Padding(4);
-            this.ucResult1.Name = "ucResult1";
-            this.ucResult1.Size = new System.Drawing.Size(338, 200);
-            this.ucResult1.TabIndex = 0;
             // 
             // title
             // 
@@ -762,7 +749,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(67)))), ((int)(((byte)(78)))));
-            this.ClientSize = new System.Drawing.Size(1108, 843);
+            this.ClientSize = new System.Drawing.Size(1108, 1027);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.title);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -775,15 +762,14 @@
             this.pnlParams.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.grbReaderParams.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupreader.ResumeLayout(false);
             this.groupreader.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numExposure)).EndInit();
-            this.Grouplot.ResumeLayout(false);
-            this.Grouplot.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numqty)).EndInit();
             this.grbformat.ResumeLayout(false);
             this.grbformat.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numberLength)).EndInit();
@@ -791,8 +777,6 @@
             this.grbSaveNewModel.PerformLayout();
             this.pnlModel.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -816,9 +800,6 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.GroupBox Grouplot;
-        private System.Windows.Forms.NumericUpDown numqty;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RichTextBox tblog;
         private System.Windows.Forms.GroupBox groupreader;
@@ -849,6 +830,9 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ComboBox cboPrinters;
         private System.Windows.Forms.Button btnprint;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button btnRunImage;
+        private System.Windows.Forms.Button btnGraphicImage;
     }
 }
 
