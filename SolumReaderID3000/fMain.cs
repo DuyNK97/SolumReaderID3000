@@ -25,9 +25,13 @@ namespace SolumReaderID3000
     public partial class fMain : Form
     {
         UDPControl udpChat;
-        ControlTCP _client = new ControlTCP();//tcpip
+        ControlTCPClient _client = new ControlTCPClient();//tcpip
+        ControlTCPServer _server = new ControlTCPServer();//tcpip
         PLCInterface _plcInterface = new PLCInterface();
 
+
+
+        #region printer
         //prnt label
         private LabelFormatDocument format = null;
         private const string appName = "Label Print";
@@ -38,6 +42,8 @@ namespace SolumReaderID3000
         Queue<int> generationQueue; // A queue containing indexes into browsingFormats
                                     // to facilitate the generation of thumbnails
         private List<string> templateVariables = new List<string>();
+        Stopwatch stopwatch = new Stopwatch();
+        #endregion
 
         public fMain()
         {
@@ -45,25 +51,7 @@ namespace SolumReaderID3000
 
 
             InitializeComponent();
-            InitReader();
-            InitModel();
-            InitLogCSV();
-            EnableControl(true);
-            this.title.OnProgramExitting += OnProgramExitting;
-            btnLoadModel_Click(null, null);
-            InitializeSerialPort(ClassifyResult.Instance.SerialPort);
-            this.title.SerialPortSettingsChangedMain += SettingsForm_SerialPortSettingsChanged;
 
-            InitLogTCP();
-            InitUDPControl();
-            InitPLCInterface();
-            //maximum form 
-            //if (this.WindowState == FormWindowState.Normal)
-            //{
-            //    this.WindowState = FormWindowState.Maximized;
-            //}
-            //else
-            //    this.WindowState = FormWindowState.Normal;
             try
             {
                 engine = new Engine(true);
@@ -76,7 +64,21 @@ namespace SolumReaderID3000
                 return;
             }
 
-            // Get the list of printers
+            InitReader();
+            InitModel();
+            InitLogCSV();
+            EnableControl(true);
+            this.title.OnProgramExitting += OnProgramExitting;
+            btnLoadModel_Click(null, null);
+            InitializeSerialPort(ClassifyResult.Instance.SerialPort);
+            this.title.SerialPortSettingsChangedMain += SettingsForm_SerialPortSettingsChanged;
+
+            InitTCPClient();
+            InitTCPServer();
+            //InitUDPControl();
+            InitPLCInterface();
+
+            #region printer
             Printers printers = new Printers();
             foreach (Seagull.BarTender.Print.Printer printer in printers)
             {
@@ -88,14 +90,15 @@ namespace SolumReaderID3000
                 // Automatically select the default printer.
                 cboPrinters.SelectedItem = printers.Default.PrinterName;
             }
+            #endregion
+
             listItems = new System.Collections.Hashtable();
             generationQueue = new Queue<int>();
             txtIdenticalCopies.MaxLength = 9;
             txtSerializedCopies.MaxLength = 9;
 
-
-
             this.title.TitleName = $"{ClassifyResult.Instance.ApplicationName}";
+
         }
         public void InitPLCInterface()
         {
@@ -113,54 +116,99 @@ namespace SolumReaderID3000
             }
 
         }
-
-        private void ReadDataFromPLC()
-        {
-            while (!this.IsDisposed)
-            {
-                if (_plcInterface.ReadBitPLC())
-                {
-                    Console.WriteLine("Printer");
-                    this.Invoke(new Action(() =>
-                    {
-                        lblWeight.Text = _plcInterface.ReadRegisterPLC();
-                        PrintLabel(Global.date, Global.MODEL, Global.seri, Global.SECCODE1, ClassifyResult.Instance.seri.ToString("000"), Global.model, Global.DATE, Global.Qty);
-                        Thread.Sleep(5000);
-                        ClassifyResult.Instance.seri = 0;
-                        while (_plcInterface.ReadBitPLC())
-                        {
-                            _plcInterface.WriteBitPLC();
-                        }
-                        ShowLog("ReadBit");
-                    }));
-                }
-                Thread.Sleep(2000);
-            }
-        }
-
         public void InitUDPControl()
         {
             udpChat = new UDPControl(ClassifyResult.Instance.ServerIP);
             udpChat.StartServer();
         }
-        public void InitLogTCP()
+        public void InitTCPClient()
         {
             _client.Connect();
             if (_client.IsConnected)
             {
-                ShowLog("Connect to TCP/IP success \n ");
+                ShowLog("Connect to TCP/IP success:\n\tIP: " + _client.serverIp + "\n\tPort: " + _client.serverPort + "\n ");
             }
             else
             {
                 ShowLog("Connect to TCP/IP fail! \n ");
             }
-            _client.LotDataReceived += OnLotDataReceived;
+            //Thread TCPClientThread = new Thread(() =>
+            //{
+
+            //});
+            //TCPClientThread.IsBackground = true; // Đảm bảo luồng này không cản trở chương trình kết thúc
+            //TCPClientThread.Start();
+
+            //_client.LotDataReceived += OnLotDataReceived;
+        }
+        public void InitTCPServer()
+        {
+            _server.Start();
+            if (_server.IsRunning)
+            {
+                ShowLog("Server TCP/IP started: \n\tIP: " + _server.serverIp + "\n\tPort: " + _server.serverPort + "\n ");
+            }
+            else
+            {
+                ShowLog("Server TCP/IP start fail! \n ");
+            }
+            Thread TCPServerThread = new Thread(() =>
+            {
+
+                //_server.LotDataReceived += OnLotDataReceived;
+                _server.LotDataReceived += data => OnLotDataReceived(data);
+            });
+            TCPServerThread.IsBackground = true; // Đảm bảo luồng này không cản trở chương trình kết thúc
+            TCPServerThread.Start();
+
         }
         private void OnLotDataReceived(string data)
         {
+            new Thread(() =>
+            {
+                SendData(data);  //gui qua com
+            }).Start();
+
+            stopwatch.Stop();
             ShowLog(" Data Received from MES: " + data + "\n");
-            SendData(data);  //gui qua com
-            HandleValidCode(imageBox1.Image.Clone() as Bitmap, DateTime.Now.ToString(), data);
+            ShowLog("Time: " + stopwatch.ElapsedMilliseconds.ToString());
+            stopwatch.Reset();
+            HandleValidCode(imageBox1.Image.Clone() as Bitmap, data, data);
+        }
+        private void ReadDataFromPLC()
+        {
+            while (!this.IsDisposed)
+            {
+                if (_plcInterface.ReadBitPLC(Global.addressCompleteTray))
+                {
+                    if (this.IsHandleCreated)
+                    {
+                        //Console.WriteLine("Printer");
+                        this.Invoke(new Action(() =>
+                        {
+                            lblWeight.Text = (double.Parse(_plcInterface.ReadRegisterPLC(Global.addressWeight)) / 1000).ToString();
+                            lblProductInBox.Text = _plcInterface.ReadRegisterPLC(Global.addressProductInBox);
+                            //PrintLabel(Global.date, Global.MODEL, Global.seri, Global.SECCODE1, ClassifyResult.Instance.seri.ToString("000"), Global.model, Global.DATE, Global.Qty);
+                            Thread.Sleep(5000);
+                            ClassifyResult.Instance.seri = 0;
+                            while (_plcInterface.ReadBitPLC(Global.addressCompleteTray))
+                            {
+                                _plcInterface.WriteBitPLC(Global.addressCompleteTray, false); //reset bit hoàn thành Tray
+                            }
+                            ShowLog("ReadBit");
+                        }));
+                    }
+                }
+
+                if (this.IsHandleCreated)
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        lblProductInBox.Text = _plcInterface.ReadRegisterPLC(Global.addressProductInBox);
+                    }));
+                }
+                Thread.Sleep(200);
+            }
         }
 
         private void InitModel()
@@ -176,6 +224,8 @@ namespace SolumReaderID3000
                     LoadModel(item);
                 }
             }
+            txtFolderPath.Text = ClassifyResult.Instance.pathFormatLabel;
+            OpenFormat(ClassifyResult.Instance.pathFormatLabel);
             SettingParams.Instance.Save();
             ClassifyResult.Instance.Save();
         }
@@ -243,7 +293,7 @@ namespace SolumReaderID3000
 
         private void SerialPorts_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            ShowLog($"MSBoard: " + serialPorts.ReadLine() + "\n");
+            //ShowLog($"MSBoard: " + serialPorts.ReadLine() + "\n");
         }
 
 
@@ -277,7 +327,7 @@ namespace SolumReaderID3000
                 if (!port.IsOpen)
                 {
                     port.Open();
-                    ShowLog($"Open port {port.PortName}");
+                    ShowLog($"Open port {port.PortName} \n");
                 }
             }
             catch (Exception ex)
@@ -312,11 +362,12 @@ namespace SolumReaderID3000
         private void InitReader()
         {
             Global.readerControl = new ReaderControl("02DA4115756");
+
             if (Global.readerControl.IsConnected)
             {
                 Global.readerControl.OnImageGrabbed += ReaderControl_OnImageGrabbed;
                 LoadReaderParams();
-                ShowLog("02DA4115756 CONNECT SUCCESS ");
+                ShowLog("02DA4115756 CONNECT SUCCESS \n ");
             }
         }
 
@@ -364,10 +415,11 @@ namespace SolumReaderID3000
                         {
                             //HandleValidCode(imageBox1.Image.Clone() as Bitmap, DateTime.Now.ToString(), "NG");
                             //HandleValidCode(bmpSaveImageGraphics, DateTime.Now.ToString(), "NG");
+                            stopwatch.Start();
                             _client.Send(code); //ok gui len MES
-                            ClassifyResult.Instance.seri++;
-                            HandleValidCode(bmpSaveImageGraphics, code, "OK");
-                            SendData("OK");
+                            //ClassifyResult.Instance.seri++;
+                            //HandleValidCode(bmpSaveImageGraphics, code, "OK");
+                            //SendData("OK");
                             //
                             //ProcessValidCode(bmpSaveImageGraphics, code);
                         }
@@ -399,10 +451,17 @@ namespace SolumReaderID3000
             ClassifyResult.Instance.RunResult = ClassifyResult.eFinalResult.NG;
             SaveImageGraphics(code, bmpSaveImageGraphics, $@"NG\{folder}\");
         }
-        private void HandleValidCode(Bitmap bmpSaveImageGraphics, string code, string folder)
+        private void HandleValidCode(Bitmap bmpSaveImageGraphics, string result, string folder)
         {
-            ClassifyResult.Instance.RunResult = ClassifyResult.eFinalResult.OK;
-            SaveImageGraphics(code, bmpSaveImageGraphics, folder + "\\");
+            if (result == "OK")
+            {
+                ClassifyResult.Instance.RunResult = ClassifyResult.eFinalResult.OK;
+            }
+            else
+            {
+                ClassifyResult.Instance.RunResult = ClassifyResult.eFinalResult.NG;
+            }
+            SaveImageGraphics(result, bmpSaveImageGraphics, folder + "\\");
 
         }
         private void AddCodeGraphic(string code)
@@ -708,6 +767,8 @@ namespace SolumReaderID3000
                 tblog.ScrollToCaret();
 
                 tblog.SelectionColor = Color.Black;
+
+
             };
 
             if (this.InvokeRequired)
@@ -899,24 +960,31 @@ namespace SolumReaderID3000
                     // Lấy đường dẫn tệp được chọn
                     string selectedFilePath = openFileDialog.FileName;
                     txtFolderPath.Text = selectedFilePath;
-
+                    ClassifyResult.Instance.pathFormatLabel = selectedFilePath;
+                    ClassifyResult.Instance.Save();
                     // Mở file và lấy các biến
-                    format = engine.Documents.Open(selectedFilePath);
-                    if (format != null)
-                    {
-                        // Lưu các biến substring vào danh sách
-                        templateVariables.Clear(); // Xóa các biến cũ nếu có
-                        foreach (var substring in format.SubStrings)
-                        {
-                            templateVariables.Add(substring.Name);
-                        }
-                        Console.WriteLine(templateVariables.ToString());
-                    }
+                    OpenFormat(selectedFilePath);
                 }
             }
 
         }
-
+        private void OpenFormat(string selectedFilePath)
+        {
+            if (File.Exists(selectedFilePath))
+            {
+                format = engine.Documents.Open(selectedFilePath);
+                if (format != null)
+                {
+                    // Lưu các biến substring vào danh sách
+                    templateVariables.Clear(); // Xóa các biến cũ nếu có
+                    foreach (var substring in format.SubStrings)
+                    {
+                        templateVariables.Add(substring.Name);
+                    }
+                    Console.WriteLine(templateVariables.ToString());
+                }
+            }
+        }
         private void PrintLabel(string date, string MODEL, string seri, string SECCODE1, string SERI, string Model, string DATE, int qty)
         {
             lock (engine)
@@ -940,7 +1008,7 @@ namespace SolumReaderID3000
                     success = Int32.TryParse(txtSerializedCopies.Text, out copies) && (copies >= 1);
                     if (!success)
                     {
-                        ShowLog( "Serialized Copies must be an integer greater than or equal to 1: "+ appName);
+                        ShowLog("Serialized Copies must be an integer greater than or equal to 1: " + appName);
                     }
                     else
                     {
@@ -1035,6 +1103,12 @@ namespace SolumReaderID3000
             {
                 Process.Start(path);
             }
+        }
+
+        private void fMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Global.readerControl.CloseDevice();
+            Global.readerControl.OnImageGrabbed -= ReaderControl_OnImageGrabbed;
         }
     }
 }

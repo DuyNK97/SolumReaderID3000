@@ -28,7 +28,9 @@ namespace SolumReaderID3000
         public static int Qty {  get; set; }
 
 
-
+        public const int addressCompleteTray = 4096 + 170;
+        public const int addressWeight = 4096 + 350;
+        public const int addressProductInBox = 4096 + 260;
 
 
         public static bool CheckDuplicateAndAdd(string newItem)

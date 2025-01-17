@@ -104,7 +104,7 @@
             this.kryptonPanel1.Location = new System.Drawing.Point(0, 0);
             this.kryptonPanel1.Name = "kryptonPanel1";
             this.kryptonPanel1.PanelBackStyle = ComponentFactory.Krypton.Toolkit.PaletteBackStyle.FormCustom1;
-            this.kryptonPanel1.Size = new System.Drawing.Size(611, 578);
+            this.kryptonPanel1.Size = new System.Drawing.Size(611, 325);
             this.kryptonPanel1.StateNormal.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(67)))), ((int)(((byte)(78)))));
             this.kryptonPanel1.TabIndex = 23;
             // 
@@ -170,6 +170,7 @@
             this.groupBox2.TabIndex = 66;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Setting Printer";
+            this.groupBox2.Visible = false;
             // 
             // label8
             // 
@@ -201,7 +202,7 @@
             this.numqty.Size = new System.Drawing.Size(83, 24);
             this.numqty.TabIndex = 65;
             this.numqty.Value = new decimal(new int[] {
-            100,
+            150,
             0,
             0,
             0});
@@ -605,7 +606,7 @@
             // 
             this.btnDone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDone.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnDone.Location = new System.Drawing.Point(523, 522);
+            this.btnDone.Location = new System.Drawing.Point(523, 269);
             this.btnDone.Name = "btnDone";
             this.btnDone.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.SparklePurple;
             this.btnDone.Size = new System.Drawing.Size(76, 52);
@@ -642,7 +643,7 @@
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(426, 523);
+            this.btnClose.Location = new System.Drawing.Point(426, 270);
             this.btnClose.Name = "btnClose";
             this.btnClose.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.SparklePurple;
             this.btnClose.Size = new System.Drawing.Size(76, 52);
@@ -677,7 +678,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(611, 578);
+            this.ClientSize = new System.Drawing.Size(611, 325);
             this.Controls.Add(this.kryptonPanel1);
             this.Name = "Setting";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

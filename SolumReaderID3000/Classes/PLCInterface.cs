@@ -41,12 +41,13 @@ namespace SolumReaderID3000.Classes
         }
 
         private int ReadPLCCountException = 0;
-        public bool ReadBitPLC()
+        public bool ReadBitPLC(int addressBit)
         {
             try
             {
+
                 int varCount = 31;
-                bool[] arr = LX5S.ReadCoilsTCPIP(4096 + 170, varCount);//Đọc bit hoàn thành Tray
+                bool[] arr = LX5S.ReadCoilsTCPIP(addressBit, varCount);//Đọc bit hoàn thành Tray
                 if (LX5S.ExceptionCode != "")
                 {
                     ReadPLCCountException++;
@@ -78,12 +79,13 @@ namespace SolumReaderID3000.Classes
                 //}));
             }
         }
-        public string ReadRegisterPLC()
+        public string ReadRegisterPLC(int addressRegister)
         {
             try
             {
+
                 int varCount = 31;
-                int[] arr = LX5S.ReadHoldingRegistersTCPIP(4096 + 350, varCount);//Đọc thanh ghi: Cân
+                int[] arr = LX5S.ReadHoldingRegistersTCPIP(addressRegister, varCount);//Đọc thanh ghi: Cân
                 if (LX5S.ExceptionCode != "")
                 {
                     ReadPLCCountException++;
@@ -116,17 +118,19 @@ namespace SolumReaderID3000.Classes
         }
         public void WriteRegisterPLC()
         {
+
             int[] DataWritePLC = new int[72];
             ushort NumberTransfer = (ushort)DataWritePLC.Length;
             LX5S.WriteMultipleRegisters(5596, DataWritePLC);
 
         }
-        
-        public void WriteBitPLC()
+
+        public void WriteBitPLC(int addressBit, bool value)
         {
+
             int[] DataWritePLC = new int[72];
             ushort NumberTransfer = (ushort)DataWritePLC.Length;
-            LX5S.WriteSingleCoilTCPIP(4096 + 170, false);
+            LX5S.WriteSingleCoilTCPIP(addressBit, value);
 
         }
     }
