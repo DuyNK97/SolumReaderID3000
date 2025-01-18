@@ -35,12 +35,12 @@ namespace SolumReaderID3000.Classes
                 tcpClient = new TcpClient();
                 tcpClient.Connect(serverIp, serverPort);
                 stream = tcpClient.GetStream();
-                Console.WriteLine("Connected to server.");
+                //Console.WriteLine("Connected to server.");
                 StartReceiving();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error connecting to server: {ex.Message}");
+                //Console.WriteLine($"Error connecting to server: {ex.Message}");
             }
         }
 
@@ -49,7 +49,7 @@ namespace SolumReaderID3000.Classes
         {
             if (!IsConnected)
             {
-                Console.WriteLine("Client is not connected to server.");
+                //Console.WriteLine("Client is not connected to server.");
                 return;
             }
 
@@ -57,11 +57,11 @@ namespace SolumReaderID3000.Classes
             {
                 byte[] data = Encoding.UTF8.GetBytes(message);
                 stream.Write(data, 0, data.Length);
-                Console.WriteLine("Data sent to server.");
+                //Console.WriteLine("Data sent to server.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error sending data: {ex.Message}");
+                //Console.WriteLine($"Error sending data: {ex.Message}");
             }
         }
 
@@ -83,7 +83,7 @@ namespace SolumReaderID3000.Classes
         {
             if (!IsConnected)
             {
-                Console.WriteLine("Client is not connected to server.");
+                //Console.WriteLine("Client is not connected to server.");
                 return;
             }
 
@@ -94,7 +94,7 @@ namespace SolumReaderID3000.Classes
                 if (bytesRead > 0)
                 {
                     string receivedData = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    Console.WriteLine($"Data received from server: {receivedData}");
+                    //Console.WriteLine($"Data received from server: {receivedData}");
 
                     //if (receivedData.Contains("Lot:"))
                     //{
@@ -104,7 +104,7 @@ namespace SolumReaderID3000.Classes
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error receiving data: {ex.Message}");
+                //Console.WriteLine($"Error receiving data: {ex.Message}");
             }
         }
 
@@ -115,11 +115,11 @@ namespace SolumReaderID3000.Classes
             {
                 stream?.Close();
                 tcpClient?.Close();
-                Console.WriteLine("Disconnected from server.");
+                //Console.WriteLine("Disconnected from server.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error disconnecting: {ex.Message}");
+                //Console.WriteLine($"Error disconnecting: {ex.Message}");
             }
         }
     }

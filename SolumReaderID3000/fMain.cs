@@ -42,7 +42,7 @@ namespace SolumReaderID3000
         Queue<int> generationQueue; // A queue containing indexes into browsingFormats
                                     // to facilitate the generation of thumbnails
         private List<string> templateVariables = new List<string>();
-        Stopwatch stopwatch = new Stopwatch();
+        public static Stopwatch stopwatch = new Stopwatch();
         #endregion
 
         public fMain()
@@ -99,7 +99,27 @@ namespace SolumReaderID3000
 
             this.title.TitleName = $"{ClassifyResult.Instance.ApplicationName}";
 
+            //Thread checkThread = new Thread(CheckThread);
+            //checkThread.IsBackground = true; // Đảm bảo luồng này không cản trở chương trình kết thúc
+            //checkThread.Start();
+
+
         }
+
+        private void CheckThread()
+        {
+            Process currentProcess = Process.GetCurrentProcess();
+
+            //Console.WriteLine($"\n\n\nProcess ID: {currentProcess.Id}");
+            //Console.WriteLine("Threads: " + currentProcess.Threads.Count);
+
+            foreach (ProcessThread thread in currentProcess.Threads)
+            {
+                //Console.WriteLine($"Thread ID: {thread.Id}, State: {thread.ThreadState}, Start Time: {thread.StartTime} , Address: {thread.StartAddress}");
+                thread.Dispose();
+            }
+        }
+
         public void InitPLCInterface()
         {
             _plcInterface.ConnectToPLC();
@@ -164,6 +184,7 @@ namespace SolumReaderID3000
         }
         private void OnLotDataReceived(string data)
         {
+            //Console.WriteLine("\n\n ====================================  \n\n");
             new Thread(() =>
             {
                 SendData(data);  //gui qua com
@@ -183,11 +204,12 @@ namespace SolumReaderID3000
                 {
                     if (this.IsHandleCreated)
                     {
-                        //Console.WriteLine("Printer");
+                        ////Console.WriteLine("Printer");
                         this.Invoke(new Action(() =>
                         {
                             lblWeight.Text = (double.Parse(_plcInterface.ReadRegisterPLC(Global.addressWeight)) / 1000).ToString();
                             lblProductInBox.Text = _plcInterface.ReadRegisterPLC(Global.addressProductInBox);
+                            //_client.Send("Print-" + _plcInterface.ReadRegisterPLC(Global.addressProductInBox));
                             //PrintLabel(Global.date, Global.MODEL, Global.seri, Global.SECCODE1, ClassifyResult.Instance.seri.ToString("000"), Global.model, Global.DATE, Global.Qty);
                             Thread.Sleep(5000);
                             ClassifyResult.Instance.seri = 0;
@@ -204,10 +226,11 @@ namespace SolumReaderID3000
                 {
                     this.Invoke(new Action(() =>
                     {
+                        ////Console.WriteLine("\n\n Doc product in box: " + stopwatch.ElapsedMilliseconds.ToString() + " \n\n");
                         lblProductInBox.Text = _plcInterface.ReadRegisterPLC(Global.addressProductInBox);
                     }));
                 }
-                Thread.Sleep(200);
+                Thread.Sleep(10);
             }
         }
 
@@ -397,6 +420,7 @@ namespace SolumReaderID3000
 
                 foreach (var item in strCode)
                 {
+                    //Console.WriteLine("\n\n  For strCode: " + stopwatch.ElapsedMilliseconds.ToString() + " \n\n");
                     AddCodeGraphic(item);
 
                     var parts = item.Split(',');
@@ -416,22 +440,25 @@ namespace SolumReaderID3000
                             //HandleValidCode(imageBox1.Image.Clone() as Bitmap, DateTime.Now.ToString(), "NG");
                             //HandleValidCode(bmpSaveImageGraphics, DateTime.Now.ToString(), "NG");
                             stopwatch.Start();
+                            //Console.WriteLine("\n\n ****************************\n\n");
+                            //Console.WriteLine("\n\n " + stopwatch.ElapsedMilliseconds.ToString() + " \n\n");
                             _client.Send(code); //ok gui len MES
                             //ClassifyResult.Instance.seri++;
                             //HandleValidCode(bmpSaveImageGraphics, code, "OK");
                             //SendData("OK");
                             //
                             //ProcessValidCode(bmpSaveImageGraphics, code);
+
                         }
-                        logCSV.SaveLog($"{ClassifyResult.Instance.Total},{currentModel},{item.Replace("\0", "")},{ClassifyResult.Instance.RunResult}");
+                        //logCSV.SaveLog($"{ClassifyResult.Instance.Total},{currentModel},{item.Replace("\0", "")},{ClassifyResult.Instance.RunResult}");
                     }
                     else
                     {
-                        logCSV.SaveLog($"{ClassifyResult.Instance.Total},{currentModel},NA,NA,{ClassifyResult.Instance.RunResult}");
+                        //logCSV.SaveLog($"{ClassifyResult.Instance.Total},{currentModel},NA,NA,{ClassifyResult.Instance.RunResult}");
                         Task.Run(() => ShowLog("Incorrect Code Info: " + item));
                     }
                 }
-                ClassifyResult.Instance.Save();
+                //ClassifyResult.Instance.Save();
             };
             // Execute on the UI thread if needed
             if (imageBox1.InvokeRequired)
@@ -443,7 +470,7 @@ namespace SolumReaderID3000
         private void HandleNoCodeDetected(Bitmap bmpSaveImageGraphics)
         {
             ClassifyResult.Instance.RunResult = ClassifyResult.eFinalResult.NG;
-            logCSV.SaveLog($"{ClassifyResult.Instance.Total},{currentModel},NA,NA,{ClassifyResult.Instance.RunResult}");
+            //logCSV.SaveLog($"{ClassifyResult.Instance.Total},{currentModel},NA,NA,{ClassifyResult.Instance.RunResult}");
             SaveImageGraphics("Empty", bmpSaveImageGraphics, @"NG\");
         }
         private void HandleInvalidCode(Bitmap bmpSaveImageGraphics, string code, string folder)
@@ -768,7 +795,7 @@ namespace SolumReaderID3000
 
                 tblog.SelectionColor = Color.Black;
 
-
+                //Console.WriteLine("\n\n inlog: " + stopwatch.ElapsedMilliseconds.ToString() + " \n\n");
             };
 
             if (this.InvokeRequired)
@@ -883,7 +910,7 @@ namespace SolumReaderID3000
             // Gọi hàm kiểm tra với dữ liệu giả
             ReaderControl_OnImageGrabbed(fakeBitmap, fakeStrCodes, fakeROIs);
 
-
+            //CheckThread();
         }
 
         //fakedata
@@ -910,9 +937,9 @@ namespace SolumReaderID3000
             a++; a1++; a2++; a3++;
             return new List<string>
             {
-            $"DM Code,aModelsdasas1solumsaauhms{a}",  // Một mã hợp lệ
-            $"QRcode,aModelsassolumsahsauhms{a1}",  // Một mã hợp lệ
-            $"QRcode,Modelsdssolumsadhsauhms{a2}",      // Một mã trống
+            //$"DM Code,aModelsdasas1solumsaauhms{a}",  // Một mã hợp lệ
+            //$"QRcode,aModelsassolumsahsauhms{a1}",  // Một mã hợp lệ
+            //$"QRcode,Modelsdssolumsadhsauhms{a2}",      // Một mã trống
             $"QRcode,Modelsdssolumsadsauh1ms{a3}"   // Một mã hợp lệ
             };
 
@@ -981,7 +1008,7 @@ namespace SolumReaderID3000
                     {
                         templateVariables.Add(substring.Name);
                     }
-                    Console.WriteLine(templateVariables.ToString());
+                    //Console.WriteLine(templateVariables.ToString());
                 }
             }
         }

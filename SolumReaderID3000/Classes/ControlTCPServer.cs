@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -31,7 +32,7 @@ namespace SolumReaderID3000.Classes
                 tcpServer.Start();
                 IsRunning = true;
 
-                Console.WriteLine($"Server started on {serverIp}:{serverPort}");
+                ////Console.WriteLine($"Server started on {serverIp}:{serverPort}");
 
                 // Bắt đầu lắng nghe client trong một luồng riêng
                 Thread acceptClientsThread = new Thread(AcceptClients);
@@ -39,7 +40,7 @@ namespace SolumReaderID3000.Classes
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error starting server: {ex.Message}");
+                ////Console.WriteLine($"Error starting server: {ex.Message}");
             }
         }
 
@@ -50,11 +51,11 @@ namespace SolumReaderID3000.Classes
             {
                 IsRunning = false;
                 tcpServer?.Stop();
-                Console.WriteLine("Server stopped.");
+                ////Console.WriteLine("Server stopped.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error stopping server: {ex.Message}");
+                ////Console.WriteLine($"Error stopping server: {ex.Message}");
             }
         }
 
@@ -65,9 +66,11 @@ namespace SolumReaderID3000.Classes
             {
                 try
                 {
-                    Console.WriteLine("Waiting for a connection...");
+                    ////Console.WriteLine("\n\n Accept Client: " + fMain.stopwatch.ElapsedMilliseconds.ToString() + " \n\n");
+                    ////Console.WriteLine("Waiting for a connection...");
                     TcpClient client = tcpServer.AcceptTcpClient(); // Chấp nhận kết nối từ client
-                    Console.WriteLine("Client connected.");
+                    ////Console.WriteLine("Client connected.");
+                    ////Console.WriteLine("\n\n After  Accept Client: " + fMain.stopwatch.ElapsedMilliseconds.ToString() + " \n\n");
 
                     // Xử lý dữ liệu từ client trong một luồng riêng
                     Thread clientThread = new Thread(() => HandleClient(client));
@@ -77,7 +80,7 @@ namespace SolumReaderID3000.Classes
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error accepting client: {ex.Message}");
+                    ////Console.WriteLine($"Error accepting client: {ex.Message}");
                 }
             }
         }
@@ -91,6 +94,7 @@ namespace SolumReaderID3000.Classes
             {
                 while (client.Connected)
                 {
+                    ////Console.WriteLine("\n\n Handle Client: " + fMain.stopwatch.ElapsedMilliseconds.ToString() + " \n\n");
                     // Nhận dữ liệu từ client
                     byte[] buffer = new byte[1024];
                     int bytesRead = stream.Read(buffer, 0, buffer.Length);
@@ -98,7 +102,7 @@ namespace SolumReaderID3000.Classes
                     if (bytesRead > 0)
                     {
                         string receivedData = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                        Console.WriteLine($"Received data: {receivedData}");
+                        ////Console.WriteLine($"Received data: {receivedData}");
 
                         // Kích hoạt sự kiện nếu có dữ liệu "Lot:"
                         LotDataReceived?.Invoke(receivedData);
@@ -112,12 +116,12 @@ namespace SolumReaderID3000.Classes
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error handling client: {ex.Message}");
+                ////Console.WriteLine($"Error handling client: {ex.Message}");
             }
             finally
             {
                 //client.Close();
-                //Console.WriteLine("Client disconnected.");
+                //////Console.WriteLine("Client disconnected.");
             }
         }
     }

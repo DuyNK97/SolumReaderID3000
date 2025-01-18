@@ -46,7 +46,7 @@ namespace SolumReaderID3000.Classes
             try
             {
 
-                int varCount = 31;
+                int varCount = 8;
                 bool[] arr = LX5S.ReadCoilsTCPIP(addressBit, varCount);//Đọc bit hoàn thành Tray
                 if (LX5S.ExceptionCode != "")
                 {

@@ -49,11 +49,11 @@ namespace SolumReaderID3000
                 //if (IsValidIPAddress(serverIP))
                 //{
                 ClassifyResult.Instance.ServerIP = tbserver.Text;
-                //    Console.WriteLine("Địa chỉ IP hợp lệ.");
+                //    //Console.WriteLine("Địa chỉ IP hợp lệ.");
                 //}
                 //else
                 //{
-                //    Console.WriteLine("Địa chỉ IP không hợp lệ.");
+                //    //Console.WriteLine("Địa chỉ IP không hợp lệ.");
                 //    MessageBox.Show("Invalid IP address.", "Check IP format", MessageBoxButtons.OK);
                 //    return;
 

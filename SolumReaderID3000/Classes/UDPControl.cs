@@ -34,14 +34,14 @@ public class UDPControl
         byte[] data = Encoding.UTF8.GetBytes(message);
         IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(remoteIpAddress), sendPort); // Cổng gửi là 2024
         udpClient.Send(data, data.Length, remoteEndPoint);
-        Console.WriteLine($"Gửi: {message}");
+        //Console.WriteLine($"Gửi: {message}");
     }
 
     private void ReceiveMessages()
     {
         //IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(localIpAddress), receivePort); // Lắng nghe trên cổng nhận 2025
         IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, receivePort); // Lắng nghe trên cổng nhận 2025
-        Console.WriteLine("Chương trình đang chờ nhận tin nhắn...");
+        //Console.WriteLine("Chương trình đang chờ nhận tin nhắn...");
 
         while (true)
         {
@@ -56,16 +56,16 @@ public class UDPControl
                 {
                     // Nếu có dữ liệu, gọi sự kiện DataReceived
                     DataReceived?.Invoke(message, remoteEndPoint.Address.ToString(), remoteEndPoint.Port);
-                    Console.WriteLine($"Nhận: {message}");
+                    //Console.WriteLine($"Nhận: {message}");
                 }
                 else
                 {
-                    Console.WriteLine("Bỏ qua tin nhắn gửi lại từ chính mình");
+                    //Console.WriteLine("Bỏ qua tin nhắn gửi lại từ chính mình");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Lỗi trong quá trình nhận dữ liệu: " + ex.Message);
+                //Console.WriteLine("Lỗi trong quá trình nhận dữ liệu: " + ex.Message);
             }
         }
     }
