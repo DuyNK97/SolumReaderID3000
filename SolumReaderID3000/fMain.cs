@@ -25,9 +25,9 @@ namespace SolumReaderID3000
     public partial class fMain : Form
     {
         UDPControl udpChat;
-        ControlTCPClient _client = new ControlTCPClient();//tcpip
-        ControlTCPServer _server = new ControlTCPServer();//tcpip
-        PLCInterface _plcInterface = new PLCInterface();
+        public static ControlTCPClient _client = new ControlTCPClient();//tcpip
+        public static ControlTCPServer _server = new ControlTCPServer();//tcpip
+        public static PLCInterface _plcInterface = new PLCInterface();
 
 
 
@@ -47,23 +47,7 @@ namespace SolumReaderID3000
 
         public fMain()
         {
-
-
-
             InitializeComponent();
-
-            try
-            {
-                engine = new Engine(true);
-            }
-            catch (PrintEngineException exception)
-            {
-                // If the engine is unable to start, a PrintEngineException will be thrown.
-                MessageBox.Show(this, exception.Message, appName);
-                this.Close(); // Close this app. We cannot run without connection to an engine.
-                return;
-            }
-
             InitReader();
             InitModel();
             InitLogCSV();
@@ -72,52 +56,15 @@ namespace SolumReaderID3000
             btnLoadModel_Click(null, null);
             InitializeSerialPort(ClassifyResult.Instance.SerialPort);
             this.title.SerialPortSettingsChangedMain += SettingsForm_SerialPortSettingsChanged;
-
             InitTCPClient();
             InitTCPServer();
             //InitUDPControl();
             InitPLCInterface();
-
-            #region printer
-            Printers printers = new Printers();
-            foreach (Seagull.BarTender.Print.Printer printer in printers)
-            {
-                cboPrinters.Items.Add(printer.PrinterName);
-            }
-
-            if (printers.Count > 0)
-            {
-                // Automatically select the default printer.
-                cboPrinters.SelectedItem = printers.Default.PrinterName;
-            }
-            #endregion
-
             listItems = new System.Collections.Hashtable();
             generationQueue = new Queue<int>();
             txtIdenticalCopies.MaxLength = 9;
             txtSerializedCopies.MaxLength = 9;
-
             this.title.TitleName = $"{ClassifyResult.Instance.ApplicationName}";
-
-            //Thread checkThread = new Thread(CheckThread);
-            //checkThread.IsBackground = true; // Đảm bảo luồng này không cản trở chương trình kết thúc
-            //checkThread.Start();
-
-
-        }
-
-        private void CheckThread()
-        {
-            Process currentProcess = Process.GetCurrentProcess();
-
-            //Console.WriteLine($"\n\n\nProcess ID: {currentProcess.Id}");
-            //Console.WriteLine("Threads: " + currentProcess.Threads.Count);
-
-            foreach (ProcessThread thread in currentProcess.Threads)
-            {
-                //Console.WriteLine($"Thread ID: {thread.Id}, State: {thread.ThreadState}, Start Time: {thread.StartTime} , Address: {thread.StartAddress}");
-                thread.Dispose();
-            }
         }
 
         public void InitPLCInterface()
@@ -163,26 +110,23 @@ namespace SolumReaderID3000
         }
         public void InitTCPServer()
         {
-            _server.Start();
-            if (_server.IsRunning)
-            {
-                ShowLog("Server TCP/IP started: \n\tIP: " + _server.serverIp + "\n\tPort: " + _server.serverPort + "\n ");
-            }
-            else
-            {
-                ShowLog("Server TCP/IP start fail! \n ");
-            }
-            Thread TCPServerThread = new Thread(() =>
-            {
+            //_server.Connect();
+            //Thread.Sleep(3000);
+            //if (_server.)
+            //{
+            ShowLog("Server TCP/IP started: \n\tIP: " + _server.serverIp + "\n\tPort: " + _server.serverPort + "\n ");
+            //}
+            //else
+            //{
+            //    ShowLog("Server TCP/IP start fail! \n ");
+            //}
 
-                //_server.LotDataReceived += OnLotDataReceived;
-                _server.LotDataReceived += data => OnLotDataReceived(data);
-            });
-            TCPServerThread.IsBackground = true; // Đảm bảo luồng này không cản trở chương trình kết thúc
-            TCPServerThread.Start();
+            //_server.LotDataReceived += OnLotDataReceived;
+            _server.DataReceived += OnLotDataReceived;
+
 
         }
-        private void OnLotDataReceived(string data)
+        private void OnLotDataReceived(object sender, string data)
         {
             //Console.WriteLine("\n\n ====================================  \n\n");
             new Thread(() =>
@@ -248,7 +192,6 @@ namespace SolumReaderID3000
                 }
             }
             txtFolderPath.Text = ClassifyResult.Instance.pathFormatLabel;
-            OpenFormat(ClassifyResult.Instance.pathFormatLabel);
             SettingParams.Instance.Save();
             ClassifyResult.Instance.Save();
         }
@@ -450,11 +393,11 @@ namespace SolumReaderID3000
                             //ProcessValidCode(bmpSaveImageGraphics, code);
 
                         }
-                        //logCSV.SaveLog($"{ClassifyResult.Instance.Total},{currentModel},{item.Replace("\0", "")},{ClassifyResult.Instance.RunResult}");
+                        logCSV.SaveLog($"{ClassifyResult.Instance.Total},{currentModel},{item.Replace("\0", "")},{ClassifyResult.Instance.RunResult}");
                     }
                     else
                     {
-                        //logCSV.SaveLog($"{ClassifyResult.Instance.Total},{currentModel},NA,NA,{ClassifyResult.Instance.RunResult}");
+                        logCSV.SaveLog($"{ClassifyResult.Instance.Total},{currentModel},NA,NA,{ClassifyResult.Instance.RunResult}");
                         Task.Run(() => ShowLog("Incorrect Code Info: " + item));
                     }
                 }
@@ -990,28 +933,11 @@ namespace SolumReaderID3000
                     ClassifyResult.Instance.pathFormatLabel = selectedFilePath;
                     ClassifyResult.Instance.Save();
                     // Mở file và lấy các biến
-                    OpenFormat(selectedFilePath);
                 }
             }
 
         }
-        private void OpenFormat(string selectedFilePath)
-        {
-            if (File.Exists(selectedFilePath))
-            {
-                format = engine.Documents.Open(selectedFilePath);
-                if (format != null)
-                {
-                    // Lưu các biến substring vào danh sách
-                    templateVariables.Clear(); // Xóa các biến cũ nếu có
-                    foreach (var substring in format.SubStrings)
-                    {
-                        templateVariables.Add(substring.Name);
-                    }
-                    //Console.WriteLine(templateVariables.ToString());
-                }
-            }
-        }
+
         private void PrintLabel(string date, string MODEL, string seri, string SECCODE1, string SERI, string Model, string DATE, int qty)
         {
             lock (engine)

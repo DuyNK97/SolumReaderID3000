@@ -110,5 +110,10 @@ namespace SolumReaderID3000
         {
             return IPAddress.TryParse(ipAddress, out _);
         }
+
+        private void btnReconnectSserver_Click(object sender, EventArgs e)
+        {
+            fMain._client.Connect();
+        }
     }
 }

@@ -68,6 +68,7 @@
             this.tbNameApp = new System.Windows.Forms.TextBox();
             this.btnDone = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             this.btnClose = new ComponentFactory.Krypton.Toolkit.KryptonButton();
+            this.btnReconnectSserver = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel1)).BeginInit();
             this.kryptonPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudDayDelete)).BeginInit();
@@ -81,6 +82,7 @@
             // 
             // kryptonPanel1
             // 
+            this.kryptonPanel1.Controls.Add(this.btnReconnectSserver);
             this.kryptonPanel1.Controls.Add(this.nudDayDelete);
             this.kryptonPanel1.Controls.Add(this.label16);
             this.kryptonPanel1.Controls.Add(this.groupBox2);
@@ -510,7 +512,7 @@
             this.numberSport.Size = new System.Drawing.Size(65, 24);
             this.numberSport.TabIndex = 41;
             this.numberSport.Value = new decimal(new int[] {
-            2025,
+            2024,
             0,
             0,
             0});
@@ -579,7 +581,7 @@
             this.tbserver.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbserver.Location = new System.Drawing.Point(127, 136);
             this.tbserver.Name = "tbserver";
-            this.tbserver.Size = new System.Drawing.Size(382, 24);
+            this.tbserver.Size = new System.Drawing.Size(264, 24);
             this.tbserver.TabIndex = 35;
             // 
             // label6
@@ -674,6 +676,16 @@
             this.btnClose.Values.Image = global::SolumReaderID3000.Properties.Resources.cancel;
             this.btnClose.Values.Text = "Close";
             // 
+            // btnReconnectSserver
+            // 
+            this.btnReconnectSserver.Location = new System.Drawing.Point(397, 136);
+            this.btnReconnectSserver.Name = "btnReconnectSserver";
+            this.btnReconnectSserver.Size = new System.Drawing.Size(129, 24);
+            this.btnReconnectSserver.TabIndex = 69;
+            this.btnReconnectSserver.Text = "Reconnect to Server";
+            this.btnReconnectSserver.UseVisualStyleBackColor = true;
+            this.btnReconnectSserver.Click += new System.EventHandler(this.btnReconnectSserver_Click);
+            // 
             // Setting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -742,5 +754,6 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.NumericUpDown nudDayDelete;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Button btnReconnectSserver;
     }
 }

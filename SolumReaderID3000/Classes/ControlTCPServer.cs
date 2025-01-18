@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 
@@ -9,120 +11,114 @@ namespace SolumReaderID3000.Classes
 {
     public class ControlTCPServer
     {
-        private TcpListener tcpServer;
-        public readonly string serverIp;
-        public readonly int serverPort;
-        public bool IsRunning;
+        public delegate void DataReceivedEventHandler(object sender, string message);
+        public event DataReceivedEventHandler DataReceived;
+        public readonly string serverIp = "107.105.42.59";
+        public readonly int serverPort= 2024;
+        IPEndPoint IP;
+        Socket server;
+        List<Socket> clientList;
 
-        public event Action<string> LotDataReceived; // Sự kiện nhận dữ liệu từ client
-
-        public ControlTCPServer(string serverIp = "107.105.42.59", int serverPort = 2024)
+        public ControlTCPServer()
         {
-            this.serverIp = serverIp;
-            this.serverPort = serverPort;
+            Connect();
         }
 
-        // Khởi động server
-        public void Start()
+        void Connect()
         {
+            clientList = new List<Socket>();
+            IP = new IPEndPoint(IPAddress.Parse("107.105.42.59"), 2024);
+            server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+
             try
             {
-                IPAddress localAddr = IPAddress.Parse(serverIp);
-                tcpServer = new TcpListener(localAddr, serverPort);
-                tcpServer.Start();
-                IsRunning = true;
+                server.Bind(IP);
+                Thread Listen = new Thread(() =>
+                {
+                    while (true)
+                    {
+                        server.Listen(50);
+                        Socket client = server.Accept();
+                        clientList.Add(client);
 
-                ////Console.WriteLine($"Server started on {serverIp}:{serverPort}");
-
-                // Bắt đầu lắng nghe client trong một luồng riêng
-                Thread acceptClientsThread = new Thread(AcceptClients);
-                acceptClientsThread.Start();
+                        Thread receive = new Thread(() => Receive(client));
+                        receive.IsBackground = true;
+                        receive.Start();
+                    }
+                });
+                Listen.IsBackground = true;
+                Listen.Start();
             }
             catch (Exception ex)
             {
-                ////Console.WriteLine($"Error starting server: {ex.Message}");
+                Console.WriteLine($"Error during server setup: {ex.Message}");
             }
         }
 
-        // Dừng server
-        public void Stop()
+        public void Close()
         {
-            try
-            {
-                IsRunning = false;
-                tcpServer?.Stop();
-                ////Console.WriteLine("Server stopped.");
-            }
-            catch (Exception ex)
-            {
-                ////Console.WriteLine($"Error stopping server: {ex.Message}");
-            }
+            server.Close();
         }
+        //public void Send(Socket client, string message)
+        //{
+        //    if (client != null && !string.IsNullOrEmpty(message) && client.Connected)
+        //    {
+        //        byte[] data = Encoding.UTF8.GetBytes(message); // Chuyển đổi string thành byte[]
+        //        client.Send(data);
+        //    }
+        //}
 
-        // Chấp nhận kết nối từ client
-        private void AcceptClients()
+        void Receive(Socket client)
         {
-            while (IsRunning)
-            {
-                try
-                {
-                    ////Console.WriteLine("\n\n Accept Client: " + fMain.stopwatch.ElapsedMilliseconds.ToString() + " \n\n");
-                    ////Console.WriteLine("Waiting for a connection...");
-                    TcpClient client = tcpServer.AcceptTcpClient(); // Chấp nhận kết nối từ client
-                    ////Console.WriteLine("Client connected.");
-                    ////Console.WriteLine("\n\n After  Accept Client: " + fMain.stopwatch.ElapsedMilliseconds.ToString() + " \n\n");
-
-                    // Xử lý dữ liệu từ client trong một luồng riêng
-                    Thread clientThread = new Thread(() => HandleClient(client));
-                    clientThread.Start();
-
-                    //if(client.Connected) return;
-                }
-                catch (Exception ex)
-                {
-                    ////Console.WriteLine($"Error accepting client: {ex.Message}");
-                }
-            }
-        }
-
-        // Xử lý client
-        private void HandleClient(TcpClient client)
-        {
-            NetworkStream stream = client.GetStream();
-
             try
             {
                 while (client.Connected)
                 {
-                    ////Console.WriteLine("\n\n Handle Client: " + fMain.stopwatch.ElapsedMilliseconds.ToString() + " \n\n");
-                    // Nhận dữ liệu từ client
-                    byte[] buffer = new byte[1024];
-                    int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                    byte[] buffer = new byte[1000000];
+                    int bytesRead = client.Receive(buffer);
 
                     if (bytesRead > 0)
                     {
-                        string receivedData = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                        ////Console.WriteLine($"Received data: {receivedData}");
-
-                        // Kích hoạt sự kiện nếu có dữ liệu "Lot:"
-                        LotDataReceived?.Invoke(receivedData);
-
-                        // Gửi phản hồi lại client
-                        string response = $"Server received: {receivedData}";
-                        byte[] responseData = Encoding.UTF8.GetBytes(response);
-                        stream.Write(responseData, 0, responseData.Length);
+                        string message = Encoding.UTF8.GetString(buffer, 0, bytesRead); // Chuyển đổi byte[] thành string
+                        if (string.IsNullOrEmpty(message))
+                        {
+                            clientList.Remove(client);
+                            client.Close();
+                            break;
+                        }
+                        AnalyzeData(message, client);
                     }
                 }
             }
             catch (Exception ex)
             {
-                ////Console.WriteLine($"Error handling client: {ex.Message}");
-            }
-            finally
-            {
-                //client.Close();
-                //////Console.WriteLine("Client disconnected.");
+                Console.WriteLine($"Error in receiving data: {ex.Message}");
+                clientList.Remove(client);
+                client.Close();
             }
         }
+
+        private void AnalyzeData(string message, Socket client)
+        {
+            //bool isValid = message.Contains("SOLUM") && message.Length >= 30;
+
+            //SendMessage(isValid ? "OK" : "NG");
+
+            OnDataReceived(message);
+        }
+
+        protected virtual void OnDataReceived(string message)
+        {
+            DataReceived?.Invoke(this, message);
+        }
+
+        //public void SendMessage(string message)
+        //{
+        //    //sTask.Delay(1000).Wait();
+        //    foreach (Socket item in clientList)
+        //    {
+        //        Send(item, message);
+        //    }
+        //}
     }
 }
