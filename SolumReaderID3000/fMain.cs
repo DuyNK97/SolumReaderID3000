@@ -535,6 +535,7 @@ namespace SolumReaderID3000
 
         private void SaveImageGraphics(string Item, Bitmap bmpSave, string subFolder)
         {
+
             new Thread(() =>
             {
                 try
@@ -724,7 +725,8 @@ namespace SolumReaderID3000
         }
         public void ShowLog(string msg, bool error = false)
         {
-
+        //    Process currprocess = Process.GetCurrentProcess();
+        //    int  task = currprocess.Threads.Count;
             Action action = () =>
             {
                 if (error)
