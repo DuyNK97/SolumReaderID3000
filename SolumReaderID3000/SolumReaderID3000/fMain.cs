@@ -696,6 +696,7 @@ namespace SolumReaderID3000
 
             Action action = () =>
             {
+                
                 if (error)
                 {
                     tblog.SelectionColor = Color.Red;
@@ -878,6 +879,7 @@ namespace SolumReaderID3000
                 })
             };
         }
+
 
         private void btnOpen_Click(object sender, EventArgs e)
         {

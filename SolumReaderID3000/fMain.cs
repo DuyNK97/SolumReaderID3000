@@ -129,13 +129,13 @@ namespace SolumReaderID3000
         private void OnLotDataReceived(object sender, string data)
         {
             //Console.WriteLine("\n\n ====================================  \n\n");
-            new Thread(() =>
-            {
-                SendData(data);  //gui qua com
-            }).Start();
+            //new Thread(() =>
+            //{
+            SendData(data);  //gui qua com
+            //}).Start();
 
             stopwatch.Stop();
-            ShowLog(" Data Received from MES: " + data + "\n");
+            ShowLog(" Data Received from MES: " + data);
             ShowLog("Time: " + stopwatch.ElapsedMilliseconds.ToString());
             stopwatch.Reset();
             HandleValidCode(imageBox1.Image.Clone() as Bitmap, data, data);
@@ -163,6 +163,7 @@ namespace SolumReaderID3000
                             }
                             ShowLog("ReadBit");
                             dgvLogCSV.Rows.Clear();
+                            tblog.Clear();
                         }));
                     }
                 }
