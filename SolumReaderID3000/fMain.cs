@@ -162,6 +162,7 @@ namespace SolumReaderID3000
                                 _plcInterface.WriteBitPLC(Global.addressCompleteTray, false); //reset bit hoàn thành Tray
                             }
                             ShowLog("ReadBit");
+                            dgvLogCSV.Rows.Clear();
                         }));
                     }
                 }
@@ -413,7 +414,7 @@ namespace SolumReaderID3000
         private void HandleNoCodeDetected(Bitmap bmpSaveImageGraphics)
         {
             ClassifyResult.Instance.RunResult = ClassifyResult.eFinalResult.NG;
-            //logCSV.SaveLog($"{ClassifyResult.Instance.Total},{currentModel},NA,NA,{ClassifyResult.Instance.RunResult}");
+            logCSV.SaveLog($"{ClassifyResult.Instance.Total},{currentModel},NA,NA,{ClassifyResult.Instance.RunResult}");
             SaveImageGraphics("Empty", bmpSaveImageGraphics, @"NG\");
         }
         private void HandleInvalidCode(Bitmap bmpSaveImageGraphics, string code, string folder)

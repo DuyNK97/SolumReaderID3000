@@ -107,6 +107,7 @@ namespace SolumReaderID3000.Classes
             if (!IsConnect())
             {
                 Console.WriteLine("Client is not connected to server.");
+                Reconnect();
                 return;
             }
 
