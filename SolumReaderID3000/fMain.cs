@@ -48,6 +48,8 @@ namespace SolumReaderID3000
         public fMain()
         {
             InitializeComponent();
+            ClassCommon.FolderAutoCreate = new FolderAutoCreate(Application.StartupPath, ClassifyResult.Instance.DayDelete);
+            ClassCommon.Common.DataGridViewLog = dgvLog;
             InitReader();
             InitModel();
             InitLogCSV();
@@ -72,14 +74,15 @@ namespace SolumReaderID3000
             _plcInterface.ConnectToPLC();
             if (_plcInterface.IsConnectPLC)
             {
-                ShowLog("Connect to PLC success! \n");
+                ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Connect to PLC success! \n");
                 Thread readDataThread = new Thread(ReadDataFromPLC);
+                readDataThread.IsBackground = true; // Đảm bảo luồng này không cản trở chương trình kết thúc
                 readDataThread.IsBackground = true; // Đảm bảo luồng này không cản trở chương trình kết thúc
                 readDataThread.Start();
             }
             else
             {
-                ShowLog("Connect to PLC fail! \n");
+                ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Connect to PLC fail! \n");
             }
 
         }
@@ -93,11 +96,11 @@ namespace SolumReaderID3000
             _client.Connect();
             if (_client.IsConnected)
             {
-                ShowLog("Connect to TCP/IP success:\n\tIP: " + _client.serverIp + "\n\tPort: " + _client.serverPort + "\n ");
+                ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Connect to TCP/IP success:\n\tIP: " + _client.serverIp + "\n\tPort: " + _client.serverPort + "\n ");
             }
             else
             {
-                ShowLog("Connect to TCP/IP fail! \n ");
+                ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Connect to TCP/IP fail! \n ");
             }
             //Thread TCPClientThread = new Thread(() =>
             //{
@@ -114,11 +117,11 @@ namespace SolumReaderID3000
             //Thread.Sleep(3000);
             //if (_server.)
             //{
-            ShowLog("Server TCP/IP started: \n\tIP: " + _server.serverIp + "\n\tPort: " + _server.serverPort + "\n ");
+            ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Server TCP/IP started: \n\tIP: " + _server.serverIp + "\n\tPort: " + _server.serverPort + "\n ");
             //}
             //else
             //{
-            //    ShowLog("Server TCP/IP start fail! \n ");
+            //    ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Server TCP/IP start fail! \n ");
             //}
 
             //_server.LotDataReceived += OnLotDataReceived;
@@ -135,8 +138,8 @@ namespace SolumReaderID3000
             //}).Start();
 
             stopwatch.Stop();
-            ShowLog(" Data Received from MES: " + data);
-            ShowLog("Time: " + stopwatch.ElapsedMilliseconds.ToString());
+            ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM, " Data Received from MES: " + data);
+            ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Time: " + stopwatch.ElapsedMilliseconds.ToString());
             stopwatch.Reset();
             HandleValidCode(imageBox1.Image.Clone() as Bitmap, data, data);
         }
@@ -161,9 +164,9 @@ namespace SolumReaderID3000
                             {
                                 _plcInterface.WriteBitPLC(Global.addressCompleteTray, false); //reset bit hoàn thành Tray
                             }
-                            ShowLog("ReadBit");
+                            ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"ReadBit");
                             dgvLogCSV.Rows.Clear();
-                            tblog.Clear();
+                            //tblog.Clear();
                         }));
                     }
                 }
@@ -174,6 +177,8 @@ namespace SolumReaderID3000
                     {
                         ////Console.WriteLine("\n\n Doc product in box: " + stopwatch.ElapsedMilliseconds.ToString() + " \n\n");
                         lblProductInBox.Text = _plcInterface.ReadRegisterPLC(Global.addressProductInBox);
+                        lblScanned.Text = _plcInterface.ReadRegisterPLC(Global.addressScanned);
+
                     }));
                 }
                 Thread.Sleep(10);
@@ -207,7 +212,6 @@ namespace SolumReaderID3000
             {
                 Action action = () =>
                 {
-                    ClassCommon.FolderAutoCreate = new FolderAutoCreate(Application.StartupPath, ClassifyResult.Instance.DayDelete);
 
                     dgvLogCSV.DataSource = null;
                     strHeaders = "TIME,NO,MODEL,";
@@ -245,7 +249,7 @@ namespace SolumReaderID3000
                 }
                 else
                 {
-                    ShowLog($"This port opened: {portName}");
+                    ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,$"This port opened: {portName}");
                 }
 
                 // _continue = true;
@@ -255,13 +259,13 @@ namespace SolumReaderID3000
             catch (Exception ex)
             {
                 MessageBox.Show($"Error opening port {portName}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Task.Run(() => ShowLog($"Error opening port {portName}: {ex.Message}"));
+                Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,$"Error opening port {portName}: {ex.Message}"));
             }
         }
 
         private void SerialPorts_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            //ShowLog($"MSBoard: " + serialPorts.ReadLine() + "\n");
+            //ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,$"MSBoard: " + serialPorts.ReadLine() + "\n");
         }
 
 
@@ -285,7 +289,7 @@ namespace SolumReaderID3000
             }
             catch (Exception ex)
             {
-                Task.Run(() => ShowLog($"Can not send data to IO: {ex.Message}"));
+                Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,$"Can not send data to IO: {ex.Message}"));
             }
         }
         private void OpenPort(SerialPort port)
@@ -295,13 +299,13 @@ namespace SolumReaderID3000
                 if (!port.IsOpen)
                 {
                     port.Open();
-                    ShowLog($"Open port {port.PortName} \n");
+                    ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,$"Open port {port.PortName} \n");
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error opening port {port.PortName}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                ShowLog($"Error opening port {port.PortName}: {ex.Message} \n Please re-setting COM.", true);
+                ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,$"Error opening port {port.PortName}: {ex.Message} \n Please re-setting COM.");
                 //this.Close();
 
             }
@@ -335,7 +339,7 @@ namespace SolumReaderID3000
             {
                 Global.readerControl.OnImageGrabbed += ReaderControl_OnImageGrabbed;
                 LoadReaderParams();
-                ShowLog("02DA4115756 CONNECT SUCCESS \n ");
+                ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"02DA4115756 CONNECT SUCCESS \n ");
             }
         }
 
@@ -400,7 +404,7 @@ namespace SolumReaderID3000
                     else
                     {
                         logCSV.SaveLog($"{ClassifyResult.Instance.Total},{currentModel},NA,NA,{ClassifyResult.Instance.RunResult}");
-                        Task.Run(() => ShowLog("Incorrect Code Info: " + item));
+                        Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Incorrect Code Info: " + item));
                     }
                 }
                 //ClassifyResult.Instance.Save();
@@ -460,7 +464,7 @@ namespace SolumReaderID3000
                         //else 
                         //{
                         //    SendData("NG");
-                        //    Task.Run(() => ShowLog("Doublicate :" + code, true));
+                        //    Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Doublicate :" + code, true));
                         //}
 
 
@@ -469,14 +473,14 @@ namespace SolumReaderID3000
                     {
                         HandleInvalidCode(bmpSaveImageGraphics, code, "NG_Format");
                         SendData("NG");
-                        Task.Run(() => ShowLog("NG_Format:" + code, true));
+                        Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"NG_Format:" + code));
                     }
                 }
                 else
                 {
                     HandleInvalidCode(bmpSaveImageGraphics, code, "NG_length");
                     SendData("NG");
-                    Task.Run(() => ShowLog("NG_length:" + code, true));
+                    Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"NG_length:" + code));
                 }
             }
             else
@@ -492,14 +496,14 @@ namespace SolumReaderID3000
                     //else
                     //{
                     //    SendData("NG");
-                    //    Task.Run(() => ShowLog("Doublicate :" + code, true));
+                    //    Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Doublicate :" + code, true));
                     //}
                 }
                 else
                 {
                     HandleInvalidCode(bmpSaveImageGraphics, code, "NG_Format");
                     SendData("NG");
-                    Task.Run(() => ShowLog("NG_Format:" + code, true));
+                    Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"NG_Format:" + code));
                 }
             }
         }
@@ -643,8 +647,6 @@ namespace SolumReaderID3000
             Global.modelList = new List<string>();
             Action action = () =>
             {
-
-                tblog.Text = string.Empty;
                 this.title.TitleName = $"{ClassifyResult.Instance.ApplicationName} [{currentModel}]";
                 cbbModel.Text = currentModel;
                 numberLength.Value = setting.Length;
@@ -671,7 +673,7 @@ namespace SolumReaderID3000
                 if (IndexModel != -1)
                 {
                     SettingParams.Instance.Parameters.RemoveAt(IndexModel);
-                    Task.Run(() => ShowLog("Remove Model : " + cbbModel.Text));
+                    Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Remove Model : " + cbbModel.Text));
                     InitModel();
 
                 }
@@ -704,7 +706,7 @@ namespace SolumReaderID3000
                 Format = tbformat.Text,
 
             });
-            Task.Run(() => ShowLog("Add new model : " + txtNewModelName.Text));
+            Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Add new model : " + txtNewModelName.Text));
             InitModel();
             EnableControl(true);
         }
@@ -722,33 +724,6 @@ namespace SolumReaderID3000
                 //InitModel();
                 MessageBox.Show($"Save setting successfully.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-        }
-        public void ShowLog(string msg, bool error = false)
-        {
-        //    Process currprocess = Process.GetCurrentProcess();
-        //    int  task = currprocess.Threads.Count;
-            Action action = () =>
-            {
-                if (error)
-                {
-                    tblog.SelectionColor = Color.Red;
-                }
-
-                StringBuilder sb = new StringBuilder();
-                sb.Append(DateTime.Now.ToString("yy-MM-dd HH:mm:ss")).Append(" - ").Append(msg).Append(Environment.NewLine);
-
-                tblog.AppendText(sb.ToString());
-                tblog.ScrollToCaret();
-
-                tblog.SelectionColor = Color.Black;
-
-                //Console.WriteLine("\n\n inlog: " + stopwatch.ElapsedMilliseconds.ToString() + " \n\n");
-            };
-
-            if (this.InvokeRequired)
-                this.Invoke(action);
-            else
-                action();
         }
         public bool Checklen(string code)
         {
@@ -954,7 +929,7 @@ namespace SolumReaderID3000
                     int copies = 1;
                     success = Int32.TryParse(txtIdenticalCopies.Text, out copies) && (copies >= 1);
                     if (!success)
-                        ShowLog("Identical Copies must be an integer greater than or equal to 1: " + appName);
+                        ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Identical Copies must be an integer greater than or equal to 1: " + appName);
                     else
                         format.PrintSetup.IdenticalCopiesOfLabel = copies;
                 }
@@ -965,7 +940,7 @@ namespace SolumReaderID3000
                     success = Int32.TryParse(txtSerializedCopies.Text, out copies) && (copies >= 1);
                     if (!success)
                     {
-                        ShowLog("Serialized Copies must be an integer greater than or equal to 1: " + appName);
+                        ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Serialized Copies must be an integer greater than or equal to 1: " + appName);
                     }
                     else
                     {
@@ -1027,9 +1002,9 @@ namespace SolumReaderID3000
                     string messageString = "\n\nMessages:";
 
                     if (result == Result.Failure)
-                        ShowLog("Print Failed" + messageString);
+                        ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Print Failed" + messageString);
                     else
-                        ShowLog("Label was successfully sent to printer.");
+                        ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Label was successfully sent to printer.");
                 }
             }
         }
