@@ -67,6 +67,8 @@ namespace SolumReaderID3000
             txtIdenticalCopies.MaxLength = 9;
             txtSerializedCopies.MaxLength = 9;
             this.title.TitleName = $"{ClassifyResult.Instance.ApplicationName}";
+            //DateTime dateTime = File.GetLastWriteTime(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + ".exe");
+            lblVersion.Text = string.Format("Version: {0}"/* - Release: {1}"*/, ProductVersion /*dateTime.ToString("dd/MM/yyyy")*/);
         }
 
         public void InitPLCInterface()
@@ -117,11 +119,11 @@ namespace SolumReaderID3000
             //Thread.Sleep(3000);
             //if (_server.)
             //{
-            ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Server TCP/IP started: \n\tIP: " + _server.serverIp + "\n\tPort: " + _server.serverPort + "\n ");
+            //ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Server TCP/IP started: \n\tIP: " + _server.serverIp + "\n\tPort: " + _server.serverPort + "\n ");
             //}
             //else
             //{
-            //    ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Server TCP/IP start fail! \n ");
+                ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Server TCP/IP start success! \n ");
             //}
 
             //_server.LotDataReceived += OnLotDataReceived;
@@ -139,8 +141,8 @@ namespace SolumReaderID3000
 
             stopwatch.Stop();
             ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM, " Data Received from MES: " + data);
-            ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Time: " + stopwatch.ElapsedMilliseconds.ToString());
-            stopwatch.Reset();
+            ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Time Send->Received: " + stopwatch.ElapsedMilliseconds.ToString());
+            stopwatch.Restart();
             HandleValidCode(imageBox1.Image.Clone() as Bitmap, data, data);
         }
         private void ReadDataFromPLC()
@@ -259,7 +261,7 @@ namespace SolumReaderID3000
             catch (Exception ex)
             {
                 MessageBox.Show($"Error opening port {portName}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,$"Error opening port {portName}: {ex.Message}"));
+               ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,$"Error opening port {portName}: {ex.Message}");
             }
         }
 
@@ -289,7 +291,7 @@ namespace SolumReaderID3000
             }
             catch (Exception ex)
             {
-                Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,$"Can not send data to IO: {ex.Message}"));
+               ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,$"Can not send data to IO: {ex.Message}");
             }
         }
         private void OpenPort(SerialPort port)
@@ -388,6 +390,9 @@ namespace SolumReaderID3000
                         {
                             //HandleValidCode(imageBox1.Image.Clone() as Bitmap, DateTime.Now.ToString(), "NG");
                             //HandleValidCode(bmpSaveImageGraphics, DateTime.Now.ToString(), "NG");
+                            stopwatch.Stop();
+                            ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM, "Time Received -> Send: " + stopwatch.ElapsedMilliseconds.ToString());
+                            stopwatch.Reset();
                             stopwatch.Start();
                             //Console.WriteLine("\n\n ****************************\n\n");
                             //Console.WriteLine("\n\n " + stopwatch.ElapsedMilliseconds.ToString() + " \n\n");
@@ -404,7 +409,7 @@ namespace SolumReaderID3000
                     else
                     {
                         logCSV.SaveLog($"{ClassifyResult.Instance.Total},{currentModel},NA,NA,{ClassifyResult.Instance.RunResult}");
-                        Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Incorrect Code Info: " + item));
+                       ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Incorrect Code Info: " + item);
                     }
                 }
                 //ClassifyResult.Instance.Save();
@@ -464,7 +469,7 @@ namespace SolumReaderID3000
                         //else 
                         //{
                         //    SendData("NG");
-                        //    Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Doublicate :" + code, true));
+                        //   ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Doublicate :" + code, true));
                         //}
 
 
@@ -473,14 +478,14 @@ namespace SolumReaderID3000
                     {
                         HandleInvalidCode(bmpSaveImageGraphics, code, "NG_Format");
                         SendData("NG");
-                        Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"NG_Format:" + code));
+                       ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"NG_Format:" + code);
                     }
                 }
                 else
                 {
                     HandleInvalidCode(bmpSaveImageGraphics, code, "NG_length");
                     SendData("NG");
-                    Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"NG_length:" + code));
+                   ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"NG_length:" + code);
                 }
             }
             else
@@ -496,14 +501,14 @@ namespace SolumReaderID3000
                     //else
                     //{
                     //    SendData("NG");
-                    //    Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Doublicate :" + code, true));
+                    //   ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Doublicate :" + code, true));
                     //}
                 }
                 else
                 {
                     HandleInvalidCode(bmpSaveImageGraphics, code, "NG_Format");
                     SendData("NG");
-                    Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"NG_Format:" + code));
+                   ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"NG_Format:" + code);
                 }
             }
         }
@@ -673,7 +678,7 @@ namespace SolumReaderID3000
                 if (IndexModel != -1)
                 {
                     SettingParams.Instance.Parameters.RemoveAt(IndexModel);
-                    Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Remove Model : " + cbbModel.Text));
+                   ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Remove Model : " + cbbModel.Text);
                     InitModel();
 
                 }
@@ -706,7 +711,7 @@ namespace SolumReaderID3000
                 Format = tbformat.Text,
 
             });
-            Task.Run(() => ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Add new model : " + txtNewModelName.Text));
+           ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Add new model : " + txtNewModelName.Text);
             InitModel();
             EnableControl(true);
         }

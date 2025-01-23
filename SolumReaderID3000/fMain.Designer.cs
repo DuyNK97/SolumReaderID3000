@@ -83,6 +83,8 @@
             this.cboPrinters = new System.Windows.Forms.ComboBox();
             this.imageBox1 = new MSFactoryDLL.ImageBox();
             this.title = new SconnectCamdeco.Title();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.lblVersion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogCSV)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlParams.SuspendLayout();
@@ -101,6 +103,7 @@
             this.pnlModel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvLogCSV
@@ -132,6 +135,7 @@
             // 
             // pnlParams
             // 
+            this.pnlParams.Controls.Add(this.panel2);
             this.pnlParams.Controls.Add(this.dgvLog);
             this.pnlParams.Controls.Add(this.groupBox1);
             this.pnlParams.Controls.Add(this.grbReaderParams);
@@ -795,6 +799,28 @@
             this.title.TitleLogo = global::SolumReaderID3000.Properties.Resources.solum;
             this.title.TitleName = "SOLUM QR READER";
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.lblVersion);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 946);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(344, 25);
+            this.panel2.TabIndex = 26;
+            // 
+            // lblVersion
+            // 
+            this.lblVersion.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVersion.ForeColor = System.Drawing.Color.White;
+            this.lblVersion.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.lblVersion.Location = new System.Drawing.Point(0, 0);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(344, 25);
+            this.lblVersion.TabIndex = 5;
+            this.lblVersion.Text = "000";
+            this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // fMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -831,6 +857,7 @@
             this.panel1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -891,6 +918,8 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Label lblScanned;
         private System.Windows.Forms.DataGridView dgvLog;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label lblVersion;
     }
 }
 

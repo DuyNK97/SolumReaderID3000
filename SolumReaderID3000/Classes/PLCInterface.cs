@@ -73,6 +73,7 @@ namespace SolumReaderID3000.Classes
 
             catch (Exception ex)
             {
+                //ConnectToPLC();
                 return false;
                 //this.Invoke(new Action(() => {
                 //    WriteLogPC(LogType.Main, "PLC", ex.ToString());
@@ -110,6 +111,7 @@ namespace SolumReaderID3000.Classes
 
             catch (Exception ex)
             {
+                //ConnectToPLC();
                 return "";
                 //this.Invoke(new Action(() => {
                 //    WriteLogPC(LogType.Main, "PLC", ex.ToString());
