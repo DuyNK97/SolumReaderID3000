@@ -647,7 +647,7 @@ namespace SolumReaderID3000
             Global.format = setting.Format;
             Global.Modelqty = setting.ModelQty;
             Global.Model = setting.ModelName;
-            ClassifyResult.Instance.Save();
+            SettingParams.Instance.Save();
             currentModel = setting.ModelName;
             Global.modelList = new List<string>();
             Action action = () =>
