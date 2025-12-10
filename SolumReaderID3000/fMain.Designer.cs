@@ -31,6 +31,8 @@
             this.dgvLogCSV = new System.Windows.Forms.DataGridView();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.pnlParams = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.lblVersion = new System.Windows.Forms.Label();
             this.dgvLog = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.ucResult1 = new SolumReaderID3000.UControls.ucResult();
@@ -83,11 +85,10 @@
             this.cboPrinters = new System.Windows.Forms.ComboBox();
             this.imageBox1 = new MSFactoryDLL.ImageBox();
             this.title = new SconnectCamdeco.Title();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.lblVersion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogCSV)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlParams.SuspendLayout();
+            this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLog)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.grbReaderParams.SuspendLayout();
@@ -103,18 +104,18 @@
             this.pnlModel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvLogCSV
             // 
             this.dgvLogCSV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLogCSV.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvLogCSV.Location = new System.Drawing.Point(3, 718);
+            this.dgvLogCSV.Location = new System.Drawing.Point(3, 936);
             this.dgvLogCSV.Name = "dgvLogCSV";
             this.dgvLogCSV.RowHeadersWidth = 51;
-            this.dgvLogCSV.Size = new System.Drawing.Size(752, 256);
+            this.dgvLogCSV.Size = new System.Drawing.Size(752, 38);
             this.dgvLogCSV.TabIndex = 18;
+            this.dgvLogCSV.Visible = false;
             // 
             // tableLayoutPanel1
             // 
@@ -128,8 +129,8 @@
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 50);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 73.2F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 26.8F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 95.49641F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4.503582F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1108, 977);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
@@ -147,6 +148,28 @@
             this.tableLayoutPanel1.SetRowSpan(this.pnlParams, 2);
             this.pnlParams.Size = new System.Drawing.Size(344, 971);
             this.pnlParams.TabIndex = 2;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.lblVersion);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 946);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(344, 25);
+            this.panel2.TabIndex = 26;
+            // 
+            // lblVersion
+            // 
+            this.lblVersion.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVersion.ForeColor = System.Drawing.Color.White;
+            this.lblVersion.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.lblVersion.Location = new System.Drawing.Point(0, 0);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(344, 25);
+            this.lblVersion.TabIndex = 5;
+            this.lblVersion.Text = "000";
+            this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // dgvLog
             // 
@@ -399,6 +422,7 @@
             this.btnRemove.TabIndex = 13;
             this.btnRemove.Text = "Remove";
             this.btnRemove.UseVisualStyleBackColor = true;
+            this.btnRemove.Visible = false;
             this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
             // btnSaveAsNew
@@ -656,7 +680,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(752, 709);
+            this.panel1.Size = new System.Drawing.Size(752, 927);
             this.panel1.TabIndex = 19;
             // 
             // groupBox3
@@ -784,7 +808,7 @@
             this.imageBox1.IsViewPlusMarker = false;
             this.imageBox1.Location = new System.Drawing.Point(0, 0);
             this.imageBox1.Name = "imageBox1";
-            this.imageBox1.Size = new System.Drawing.Size(752, 709);
+            this.imageBox1.Size = new System.Drawing.Size(752, 927);
             this.imageBox1.TabIndex = 3;
             // 
             // title
@@ -798,28 +822,6 @@
             this.title.TabIndex = 0;
             this.title.TitleLogo = global::SolumReaderID3000.Properties.Resources.solum;
             this.title.TitleName = "SOLUM QR READER";
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.lblVersion);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 946);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(344, 25);
-            this.panel2.TabIndex = 26;
-            // 
-            // lblVersion
-            // 
-            this.lblVersion.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVersion.ForeColor = System.Drawing.Color.White;
-            this.lblVersion.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblVersion.Location = new System.Drawing.Point(0, 0);
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(344, 25);
-            this.lblVersion.TabIndex = 5;
-            this.lblVersion.Text = "000";
-            this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // fMain
             // 
@@ -838,6 +840,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogCSV)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.pnlParams.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvLog)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.grbReaderParams.ResumeLayout(false);
@@ -857,7 +860,6 @@
             this.panel1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

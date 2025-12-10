@@ -99,10 +99,11 @@ namespace SolumReaderID3000
             if (_client.IsConnected)
             {
                 ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Connect to TCP/IP success:\n\tIP: " + _client.serverIp + "\n\tPort: " + _client.serverPort + "\n ");
+
             }
             else
             {
-                ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Connect to TCP/IP fail! \n ");
+                ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM, "******************\nConnect to TCP/IP fail!\n IP: " + _client.serverIp + "\n\tPort: " + _client.serverPort+"\n ******************");
             }
             //Thread TCPClientThread = new Thread(() =>
             //{
@@ -647,7 +648,9 @@ namespace SolumReaderID3000
             Global.format = setting.Format;
             Global.Modelqty = setting.ModelQty;
             Global.Model = setting.ModelName;
+            ClassifyResult.Instance.Model =setting.ModelName;
             SettingParams.Instance.Save();
+            ClassifyResult.Instance.Save();
             currentModel = setting.ModelName;
             Global.modelList = new List<string>();
             Action action = () =>

@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace SolumReaderID3000.Classes
 {
@@ -42,27 +43,41 @@ namespace SolumReaderID3000.Classes
             }
             
         }
-        public void Connect()
+        public void Connect(int timeoutSeconds = 30, int maxRetries = 5)
         {
+            int attempts = 0;
+            var startTime = DateTime.UtcNow;
+
             while (!IsConnect())
             {
+                if (attempts >= maxRetries ||
+                    (DateTime.UtcNow - startTime).TotalSeconds >= timeoutSeconds)
+                {
+                    MessageBox.Show("Can not connection to "+ serverIp + ":"+ serverPort +", please check Firewall");
+                    Console.WriteLine("Connect timeout or max retries reached!");
+                    break;
+                }
+
+                attempts++;
+
                 try
                 {
                     tcpClient = new TcpClient();
                     tcpClient.Connect(serverIp, serverPort);
                     stream = tcpClient.GetStream();
+
                     Console.WriteLine("Connected to server.");
                     StartReceiving();
                     IsConnected = true;
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error connecting to server: {ex.Message}");
-                    Console.WriteLine("Retrying in 5 seconds...");
-                    Thread.Sleep(5000); // Thử lại sau 5 giây
+                    Console.WriteLine($"Attempt {attempts}: {ex.Message}");
+                    Thread.Sleep(5000);
                 }
             }
         }
+
 
         static Stopwatch stopwatchI0 = new Stopwatch();
 
