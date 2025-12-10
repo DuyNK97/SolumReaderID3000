@@ -98,12 +98,12 @@ namespace SolumReaderID3000
             _client.Connect();
             if (_client.IsConnected)
             {
-                ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Connect to TCP/IP success:\n\tIP: " + _client.serverIp + "\n\tPort: " + _client.serverPort + "\n ");
+                ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM,"Connect to TCP/IP success:\n\tIP: " + _client.ServerIp + "\n\tPort: " + _client.ServerPort + "\n ");
 
             }
             else
             {
-                ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM, "******************\nConnect to TCP/IP fail!\n IP: " + _client.serverIp + "\n\tPort: " + _client.serverPort+"\n ******************");
+                ClassCommon.Common.SaveLogString(eSAVING_LOG_TYPE.PROGRAM, "******************\nConnect to TCP/IP fail!\n IP: " + _client.ServerIp + "\n\tPort: " + _client.ServerPort+"\n ******************");
             }
             //Thread TCPClientThread = new Thread(() =>
             //{
@@ -639,6 +639,8 @@ namespace SolumReaderID3000
 
         private void LoadModel(SettingParam setting)
         {
+            _client.Reconnect();
+
             numExposure.Value = (decimal)setting.Exposure;
             numGain.Value = (decimal)setting.Gain;
 
